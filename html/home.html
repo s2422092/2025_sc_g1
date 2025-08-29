@@ -36,7 +36,6 @@
             <div class="comment-box">
                 <div class="comment-header">
                     <h2>コメント欄</h2>
-                    <button class="comment-expand-btn">拡大</button>
                 </div>
                 
                 <div class="comment-input">
@@ -55,7 +54,6 @@
         <div class="comment-modal" id="commentModal">
             <div class="comment-header">
                 <h2>コメント欄</h2>
-                <button id="closeModal">▷</button>
             </div>
             <div class="comment-input">
                 <textarea class="comment-area" placeholder="コメントを入力"></textarea>
@@ -81,18 +79,23 @@
 
 </html>
 
-<script>
-const expandBtn = document.querySelector('.comment-expand-btn');
-const modal = document.getElementById('commentModal');
-const closeBtn = document.getElementById('closeModal');
 
-expandBtn.addEventListener('click', () => {
+
+<script>
+const modal = document.getElementById('commentModal');
+const userFollowSection = document.querySelector('.user-follow-section');
+
+// ユーザー情報領域をダブルクリックで開く
+userFollowSection.addEventListener('dblclick', () => {
   modal.classList.add('active'); // 出現
 });
 
-closeBtn.addEventListener('click', () => {
+// モーダルをダブルクリックで閉じる
+modal.addEventListener('dblclick', () => {
   modal.classList.remove('active'); // 閉じる
 });
+</script>
+
 
 
 </script>
