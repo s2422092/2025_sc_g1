@@ -1,0 +1,54 @@
+/* CSS */
+.follow-box {
+  background: #ffc0cb;        /* ピンク */
+  border: 1px solid #f39ab1;  /* 少し濃いピンクの枠 */
+  border-radius: 10px;         /* 角を少し丸く */
+  padding: 14px 18px;          /* 余白 */
+  width: fit-content;          /* 中身に合わせる（必要なら固定幅に変更可） */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08); /* 軽い影で浮かせる */
+}
+
+.follow-box h2 {
+  margin: 0;                   /* 余白リセット */
+  color: #8a2a47;              /* 視認性の良い濃いめの文字色 */
+  font-size: 1.1rem;           /* お好みで調整 */
+  font-weight: 700;
+}
+
+/* 触ったときのちょい演出（任意） */
+.follow-box:hover {
+  transform: translateY(-1px);
+  transition: 0.2s ease;
+}
+
+
+.comment-box {
+  width: 300px;        /* 枠全体の幅 */
+  margin: 20px 0;
+}
+
+.comment-area {
+  width: 100%;         /* 親要素に合わせる */
+  height: 100px;       /* 高さ（必要に応じて変更可） */
+  border: 2px solid #ccc; /* グレーの枠線 */
+  border-radius: 8px;  /* 角を少し丸く */
+  background: #fff;    /* 白背景 */
+  margin-top: 10px;    /* 見出しとの間に余白 */
+}
+
+
+.arrow-right {
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;   /* 上の余白 */
+  border-bottom: 15px solid transparent;/* 下の余白 */
+  border-left: 25px solid black;        /* 右向き三角形の本体 */
+}
+
+.arrow-left {
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;    /* 上の余白 */
+  border-bottom: 15px solid transparent; /* 下の余白 */
+  border-right: 25px solid black;        /* 左向き三角形の本体 */
+}
