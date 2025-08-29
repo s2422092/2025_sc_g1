@@ -15,7 +15,7 @@
         <nav class="right">
             <ul>
                 <li><a href="#">フォロー</a></li>
-                <li><a href="#">おすすめ</a></li>
+                <li><a href="home.php">おすすめ</a></li>
             </ul>
         </nav>        
     </header>
@@ -71,9 +71,9 @@
 
     <nav class="main-nav-under">
         <ul>
-            <li><a href="#">ホーム</a></li>
-            <li><a href="#">投稿</a></li>
-            <li><a href="#">マイページ</a></li>
+            <li><a href="home.php">ホーム</a></li>
+            <li><a href="post.php">投稿</a></li>
+            <li><a href="mypage.php">マイページ</a></li>
         </ul>
     </nav>
 </body>
