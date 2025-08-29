@@ -10,8 +10,8 @@
   <header class="main-header">
     <h1 class="site-title">褒め言葉SNS</h1>
     <nav class="auth-links">
-      <a href="#">新規登録</a>
-      <a href="#">ログイン</a>
+      <a href="Registry.php">新規登録</a>
+      <a href="login.php">ログイン</a>
     </nav>
   </header>
 
@@ -42,8 +42,6 @@
 
     <section class="cta">
       <h2>さっそく始めてみませんか？</h2>
-      <a href="#" class="btn">新規登録はこちら</a>
-      <a href="#" class="btn secondary">ログイン</a>
     </section>
   </main>
 
