@@ -189,7 +189,7 @@ body {
 
 .comment-area {
   width: 100%;
-  height: 100px;
+  height: 300px;
   border: 2px solid #ddd;
   border-radius: 8px;
   background: #fafafa;
@@ -209,21 +209,27 @@ body {
 
 /* ====== コメント一覧 & 投稿ボタン ====== */
 .comment-list {
-    margin-top: 10px;
-    max-height: 200px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 100px; /* デフォルトは小さめ */
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
+
+
+/* コメント1件ごとの表示 */
 .comment-list .comment-item {
     background: #f0f0f0;
-    padding: 8px 12px;
+    padding: 10px 14px;
     border-radius: 12px;
-    font-size: 14px;
+    font-size: 15px;
+    line-height: 1.5;
     word-wrap: break-word;
 }
+
 
 .comment-submit {
     margin-top: 5px;
@@ -259,39 +265,6 @@ body {
     transition: 0.2s;
 }
 
-.comment-expand-btn:hover {
-    background-color: #d92038;
-}
-
-/* コメント欄拡大時 */
-.comment-box.expanded {
-    width: 100%;
-    max-width: 600px;
-    display: flex;
-    flex-direction: column;
-}
-
-/* コメント入力欄 */
-.comment-box.expanded .comment-area {
-    height: 300px; /* 高さ拡大 */
-    font-size: 16px;
-    flex-shrink: 0;
-}
-
-/* コメントリスト */
-.comment-box.expanded .comment-list {
-    max-height: 300px;
-    overflow-y: auto;
-    margin-top: 10px;
-}
-
-/* 投稿ボタンを縦いっぱいに */
-.comment-box.expanded .comment-submit {
-    flex-grow: 1;          /* 空いている縦方向のスペースを全部使う */
-    margin-top: 10px;
-    font-size: 16px;
-    border-radius: 12px;
-}
 
 
 
