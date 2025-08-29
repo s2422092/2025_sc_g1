@@ -24,9 +24,10 @@ body {
 .main-header nav ul {
   list-style: none;
   display: flex;
-  gap: 20px;
+  gap: 40px;
   margin: 0;
   padding: 0;
+  font-size: 25px;
 }
 
 .main-header nav a {
@@ -57,7 +58,7 @@ body {
 .main-nav-under ul {
   list-style: none;
   display: flex;
-  gap: 30px;
+  gap: 300px;
   margin: 0;
   padding: 0;
 }
@@ -66,7 +67,7 @@ body {
   color: white;
   text-decoration: none;
   font-family: sans-serif;
-  font-size: 14px;
+  font-size: 25px;
   transition: color 0.2s;
 }
 
@@ -182,33 +183,153 @@ body {
 .follow-box:hover {
   background: #d92038;
   color: white;
-  transform: scale(1.05);
 }
 
-/* ====== コメント欄 ====== */
+
+
 .comment-box {
-  background: #fff;
+  height: 450px;          /* ボックスの高さ固定 */
+  display: flex;          /* 中身を縦方向に配置 */
+  flex-direction: column;
+  justify-content: flex-start; /* 上から積む */
 }
 
+/* コメント入力とボタンを横並びにするラッパー */
+.comment-input {
+  display: flex;
+  align-items: flex-start; /* 上揃えにする（textarea の上端とボタンの上端を揃える） */
+  gap: 8px; /* 余白 */
+}
+
+/* テキストエリア */
 .comment-area {
-  width: 100%;
-  height: 100px;
+  flex: 1;                /* 横幅いっぱいに広がる */
+  min-height: 30px;      /* 縦の大きさ */
   border: 2px solid #ddd;
   border-radius: 8px;
   background: #fafafa;
-  margin-top: 10px;
   padding: 10px;
   font-size: 14px;
   color: #333;
   outline: none;
   resize: none;
-  transition: border-color 0.2s, background 0.2s;
+}
+
+/* 投稿ボタン */
+.comment-submit {
+  padding: 8px 14px;
+  border: none;
+  background-color: #ef2a41;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  height: 30px;          /* textarea と高さを揃える */
+}
+
+.comment-submit:hover {
+  background-color: #d92038;
 }
 
 .comment-area:focus {
   border-color: #ef2a41;
   background: #fff;
 }
+
+/* ====== コメント一覧 & 投稿ボタン ====== */
+.comment-list {
+    width: 100%;
+    max-width: 600px;
+    max-height: 100px; /* デフォルトは小さめ */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+
+
+/* コメント1件ごとの表示 */
+.comment-list .comment-item {
+    background: #f0f0f0;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 15px;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+
+.comment-submit {
+    margin-top: 5px;
+    padding: 6px 12px;
+    border: none;
+    background-color: #ef2a41;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.comment-submit:hover {
+    background-color: #d92038;
+}
+
+/* コメントヘッダー横並び */
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.comment-expand-btn {
+    padding: 4px 8px;
+    font-size: 12px;
+    border: none;
+    background-color: #ef2a41;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* ====== コメントモーダル ====== */
+.comment-modal {
+  position: fixed;
+  top: 0;
+  right: -100%;          /* 初期は画面外 */
+  width: 500px;           /* 好きな幅に調整 */
+  height: 100%;            /* 好きな高さに調整 */
+  background: #fff;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -4px 15px rgba(0,0,0,0.2);
+  transition: right 0.4s ease;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+/* 表示状態 */
+.comment-modal.active {
+  right: 0;              /* スライドイン */
+}
+
+/* 閉じるボタンをモーダルの高さ中央に配置 */
+#closeModal {
+  position: absolute;
+  top: 50%;              /* 上から50% */
+  left: 0%;             /* 横中央 */
+  transform: translate(-50%, -50%); /* ちょうど中央に */
+  padding: 8px 16px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
 
 /* ====== レスポンシブ ====== */
 @media screen and (max-width: 900px) {

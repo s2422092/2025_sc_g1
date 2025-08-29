@@ -34,10 +34,35 @@
                 <h2>フォロー</h2>
             </div>
             <div class="comment-box">
-                <h2>コメント欄</h2>
-                <div class="comment-area"></div>
+                <div class="comment-header">
+                    <h2>コメント欄</h2>
+                </div>
+                
+                <div class="comment-input">
+                <textarea class="comment-area" placeholder="コメントを入力"></textarea>
+                <button class="comment-submit">投稿</button>
+                </div>
+
+
+                <p>ここに褒め言葉を表示</p>
+                <div class="comment-list"></div> <!-- 投稿されたコメントを表示 -->
             </div>
         </div>
+
+
+        <!-- モーダルとして右下に追加する領域 -->
+        <div class="comment-modal" id="commentModal">
+            <div class="comment-header">
+                <h2>コメント欄</h2>
+            </div>
+            <div class="comment-input">
+                <textarea class="comment-area" placeholder="コメントを入力"></textarea>
+                <button class="comment-submit">投稿</button>
+            </div>
+            <p>ここに褒め言葉を表示</p>
+            <div class="comment-list"></div>
+        </div>
+
     </div>
 
     <nav class="main-nav-under">
@@ -47,7 +72,28 @@
             <li><a href="#">マイページ</a></li>
         </ul>
     </nav>
-
-    <div class="main"></div>
 </body>
+
+
 </html>
+
+
+
+<script>
+const modal = document.getElementById('commentModal');
+const userFollowSection = document.querySelector('.user-follow-section');
+
+// ユーザー情報領域をダブルクリックで開く
+userFollowSection.addEventListener('dblclick', () => {
+  modal.classList.add('active'); // 出現
+});
+
+// モーダルをダブルクリックで閉じる
+modal.addEventListener('dblclick', () => {
+  modal.classList.remove('active'); // 閉じる
+});
+</script>
+
+
+
+</script>
