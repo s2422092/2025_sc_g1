@@ -48,9 +48,23 @@
                 <p>ここに褒め言葉を表示</p>
                 <div class="comment-list"></div> <!-- 投稿されたコメントを表示 -->
             </div>
-
-
         </div>
+
+
+        <!-- モーダルとして右下に追加する領域 -->
+        <div class="comment-modal" id="commentModal">
+            <div class="comment-header">
+                <h2>コメント欄</h2>
+                <button id="closeModal">閉じる</button>
+            </div>
+            <div class="comment-input">
+                <textarea class="comment-area" placeholder="コメントを入力"></textarea>
+                <button class="comment-submit">投稿</button>
+            </div>
+            <p>ここに褒め言葉を表示</p>
+            <div class="comment-list"></div>
+        </div>
+
     </div>
 
     <nav class="main-nav-under">
@@ -68,17 +82,17 @@
 </html>
 
 <script>
-document.querySelectorAll('.comment-expand-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const commentBox = btn.closest('.comment-box');
-        commentBox.classList.toggle('expanded');
+const expandBtn = document.querySelector('.comment-expand-btn');
+const modal = document.getElementById('commentModal');
+const closeBtn = document.getElementById('closeModal');
 
-        const textArea = commentBox.querySelector('.comment-area');
-
-        if(commentBox.classList.contains('expanded')){
-            textArea.focus(); // 拡大時に自動フォーカス
-        }
-    });
+expandBtn.addEventListener('click', () => {
+  modal.classList.add('active'); // 出現
 });
+
+closeBtn.addEventListener('click', () => {
+  modal.classList.remove('active'); // 閉じる
+});
+
 
 </script>

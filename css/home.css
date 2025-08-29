@@ -293,6 +293,27 @@ body {
     transition: 0.2s;
 }
 
+/* ====== コメントモーダル ====== */
+.comment-modal {
+  position: fixed;
+  top: 0;
+  right: -100%;          /* 初期は画面外 */
+  width: 500px;           /* 好きな幅に調整 */
+  height: 100%;            /* 好きな高さに調整 */
+  background: #fff;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -4px 15px rgba(0,0,0,0.2);
+  transition: right 0.4s ease;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+/* 表示状態 */
+.comment-modal.active {
+  right: 0;              /* スライドイン */
+}
 
 
 
