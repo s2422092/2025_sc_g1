@@ -113,6 +113,7 @@ try {
             </div>
 
             <p>ここに褒め言葉を表示</p>
+
             <div class="comment-list"></div>
         </div>
 

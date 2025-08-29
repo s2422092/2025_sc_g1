@@ -433,7 +433,41 @@ body {
     color: #666;
 }
 
-
+    .compliment-summary {
+      margin: 20px;
+      font-family: sans-serif;
+    }
+    .compliment-item {
+      border-bottom: 1px solid #ccc;
+      padding: 10px 0;
+    }
+    .compliment-title {
+      cursor: pointer;
+      font-weight: bold;
+      color: #333;
+      transition: color 0.2s;
+    }
+    .compliment-title:hover {
+      color: #555;
+    }
+    .compliment-users {
+      margin-left: 20px;
+      margin-top: 5px;
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+      max-height: 150px;      /* 最大高さを設定 */
+      overflow-y: auto;       /* 縦スクロールを有効化 */
+      padding-right: 5px;     /* スクロールバー分の余白 */
+    }
+    .compliment-users p {
+      margin: 3px 0;
+      font-size: 14px;
+      color: #444;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
 /* ====== レスポンシブ ====== */
 @media screen and (max-width: 900px) {
   .main-content {

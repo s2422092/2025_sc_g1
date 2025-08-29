@@ -88,10 +88,40 @@ try {
                     <button class="comment-submit">投稿</button>
                 </div>
 
+                <div class="compliment-summary">
+                    <div class="compliment-item">
+                        <p class="compliment-title">すごい！！: 130件</p>
+                        <div class="compliment-users">
+                        <p>ユーザー名a</p>
+                        <p>ユーザー名b</p>
+                        <p>ユーザー名c</p>
+                        <p>ユーザー名d</p>
+                        <p>ユーザー名e</p>
+                        <p>ユーザー名f</p>
+                        <p>ユーザー名g</p>
+                        <p>ユーザー名h</p>
+                        <p>ユーザー名i</p>
+                        <p>ユーザー名j</p>
+                        <p>ユーザー名k</p>
+                        </div>
+                    </div>
 
+                    <div class="compliment-item">
+                        <p class="compliment-title">素晴らしい！: 120件</p>
+                        <div class="compliment-users">
+                        <p>ユーザー名d</p>
+                        <p>ユーザー名e</p>
+                        </div>
+                    </div>
 
+                    <div class="compliment-item">
+                        <p class="compliment-title">最高！: 95件</p>
+                        <div class="compliment-users">
+                        <p>ユーザー名f</p>
+                        </div>
+                    </div>
+                </div>
 
-                <p>ここに褒め言葉を表示</p>
                 <div class="comment-list"></div> <!-- 投稿されたコメントを表示 -->
             </div>
         </div>
@@ -117,7 +147,39 @@ try {
 
 
 
-            <p>ここに褒め言葉を表示</p>
+                <div class="compliment-summary">
+                    <div class="compliment-item">
+                        <p class="compliment-title">すごい！！: 130件</p>
+                        <div class="compliment-users">
+                        <p>ユーザー名a</p>
+                        <p>ユーザー名b</p>
+                        <p>ユーザー名c</p>
+                        <p>ユーザー名d</p>
+                        <p>ユーザー名e</p>
+                        <p>ユーザー名f</p>
+                        <p>ユーザー名g</p>
+                        <p>ユーザー名h</p>
+                        <p>ユーザー名i</p>
+                        <p>ユーザー名j</p>
+                        <p>ユーザー名k</p>
+                        </div>
+                    </div>
+
+                    <div class="compliment-item">
+                        <p class="compliment-title">素晴らしい！: 120件</p>
+                        <div class="compliment-users">
+                        <p>ユーザー名d</p>
+                        <p>ユーザー名e</p>
+                        </div>
+                    </div>
+
+                    <div class="compliment-item">
+                        <p class="compliment-title">最高！: 95件</p>
+                        <div class="compliment-users">
+                        <p>ユーザー名f</p>
+                        </div>
+                    </div>
+                </div>
             <div class="comment-list"></div>
         </div>
 
@@ -151,6 +213,15 @@ modal.addEventListener('dblclick', () => {
   modal.classList.remove('active'); // 閉じる
 });
 
+document.querySelectorAll('.compliment-title').forEach(item => {
+    item.addEventListener('click', () => {
+      const usersDiv = item.nextElementSibling;
+      usersDiv.style.display =
+        usersDiv.style.display === 'none' || usersDiv.style.display === ''
+          ? 'block'
+          : 'none';
+    });
+  });
 </script>
 
 
