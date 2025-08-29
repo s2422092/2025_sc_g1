@@ -180,11 +180,8 @@ body {
 }
 
 .follow-box:hover {
-  width: 100%;
-  height: 300px;
   background: #d92038;
   color: white;
-  transform: scale(1.05);
 }
 
 
