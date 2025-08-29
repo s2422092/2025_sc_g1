@@ -21,6 +21,7 @@ if (!isset($_SESSION['user_id'])) {
 </head>
 
 <body>
+    
     <header class="main-header">
         <nav class="right">
             <ul>
@@ -29,9 +30,9 @@ if (!isset($_SESSION['user_id'])) {
             </ul>
         </nav>        
 
-        <h1>マイページへようこそ、<?php echo htmlspecialchars($_SESSION['user_name']); ?>さん！</h1>
-
+        <h1><?php echo htmlspecialchars($_SESSION['user_name']); ?>さん</h1>
     </header>
+
 
     <!-- 写真＋右側 -->
     <div class="main-content">

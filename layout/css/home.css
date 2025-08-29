@@ -13,13 +13,32 @@ body {
 
 /* ====== ヘッダー ====== */
 .main-header {
-  background-color: #9f9e9e;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    background-color: #9f9e9e;
+    display: flex;
+    justify-content: center; /* nav を中央に寄せる */
+    align-items: center;
+    position: relative;      /* h1 を絶対配置するため */
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
+/* ナビは中央表示 */
+.main-header nav {
+    z-index: 1; /* h1 の下に表示されないように */
+}
+
+/* ユーザー名を右上に固定 */
+.main-header h1 {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    margin: 0;
+    color: white;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+
 
 .main-header nav ul {
   list-style: none;
