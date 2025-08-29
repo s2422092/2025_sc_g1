@@ -30,7 +30,7 @@ if (!isset($_SESSION['user_id'])) {
         </ul>
     </nav>
   
-
+        <p><a href="logout.php">ログアウト</a></p>
         <h1><?php echo htmlspecialchars($_SESSION['user_name']); ?>さん</h1>
     </header>
 

@@ -51,12 +51,34 @@ body {
 /* ユーザー名を右上に固定 */
 .main-header h1 {
     position: absolute;
-    top: 10px;
-    right: 20px;
+    top: 10px;          /* 上から10px */
+    right: 20px;        /* 右から20px */
     margin: 0;
     color: white;
     font-size: 24px;
     font-weight: 600;
+}
+
+/* ログアウトリンクをh1の下に配置 */
+.main-header p {
+    position: absolute;
+    top: 44px;          /* h1の下に20pxくらい余白を取る */
+    right: 20px;
+    margin: 0;
+}
+
+.main-header p a {
+    color: white;
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.main-header p a:hover {
+    background-color: rgba(255,255,255,0.2); /* 少し背景を変えてホバー感 */
 }
 
 
