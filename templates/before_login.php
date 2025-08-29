@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>ホーム | 褒め言葉SNS</title>
-  <link rel="stylesheet" href="layout/css/before_home.css">
+  <link rel="stylesheet" href="../layout/css/before_home.css">
 </head>
 <body>
   <!-- ヘッダー -->
