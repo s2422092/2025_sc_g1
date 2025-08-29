@@ -1,3 +1,13 @@
+<?php
+session_start(); // セッションを開始
+
+// ログインしていなければログインページにリダイレクト
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -11,14 +21,19 @@
 </head>
 
 <body>
+
     <header class="main-header">
-        <nav class="right">
-            <ul>
-                <li><a href="#">フォロー</a></li>
-                <li><a href="#">おすすめ</a></li>
-            </ul>
-        </nav>        
+    <nav class="right">
+        <ul>
+            <li><a href="home_follow.php" class="<?php if(basename($_SERVER['PHP_SELF']) == 'home_follow.php'){ echo 'active'; } ?>">フォロー</a></li>
+            <li><a href="home.php" class="<?php if(basename($_SERVER['PHP_SELF']) == 'home.php'){ echo 'active'; } ?>">おすすめ</a></li>
+        </ul>
+    </nav>
+  
+        <p><a href="logout.php">ログアウト</a></p>
+        <h1><?php echo htmlspecialchars($_SESSION['user_name']); ?>さん</h1>
     </header>
+
 
     <!-- 写真＋右側 -->
     <div class="main-content">
@@ -71,9 +86,9 @@
 
     <nav class="main-nav-under">
         <ul>
-            <li><a href="#">ホーム</a></li>
-            <li><a href="#">投稿</a></li>
-            <li><a href="#">マイページ</a></li>
+            <li><a href="home.php">ホーム</a></li>
+            <li><a href="post.php">投稿</a></li>
+            <li><a href="mypage.php">マイページ</a></li>
         </ul>
     </nav>
 </body>
@@ -100,4 +115,12 @@ modal.addEventListener('dblclick', () => {
 
 
 
-</script>
+<?php
+// ログアウト処理
+if (isset($_GET['logout'])) {
+    session_unset();
+    session_destroy();
+    header('Location: before_login.php');
+    exit;
+}
+?>

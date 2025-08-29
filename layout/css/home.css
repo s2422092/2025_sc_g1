@@ -13,13 +13,75 @@ body {
 
 /* ====== ヘッダー ====== */
 .main-header {
-  background-color: #9f9e9e;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    background-color: #9f9e9e;
+    display: flex;
+    justify-content: center; /* nav を中央に寄せる */
+    align-items: center;
+    position: relative;      /* h1 を絶対配置するため */
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
+/* ナビは中央表示 */
+/* 通常リンク */
+.main-header nav a {
+  color: #666;               /* 通常は中くらいの灰色 */
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 16px;         /* リンク周りに余白を追加 */
+  border-radius: 8px;        /* 少し角丸に */
+  transition: all 0.2s;
+}
+
+/* ホバー時 */
+.main-header nav a:hover {
+  background-color: #555;    /* 濃い灰色で背景を変える */
+  color: #fff;               /* 文字は白で読みやすく */
+}
+
+/* アクティブリンク */
+.main-header nav a.active {
+  background-color: #333;    /* 濃い灰色で背景を強調 */
+  color: #fff;               /* 文字は白に */
+  font-weight: 700;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* 少し浮いてる感 */
+}
+
+
+/* ユーザー名を右上に固定 */
+.main-header h1 {
+    position: absolute;
+    top: 10px;          /* 上から10px */
+    right: 20px;        /* 右から20px */
+    margin: 0;
+    color: white;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* ログアウトリンクをh1の下に配置 */
+.main-header p {
+    position: absolute;
+    top: 44px;          /* h1の下に20pxくらい余白を取る */
+    right: 20px;
+    margin: 0;
+}
+
+.main-header p a {
+    color: white;
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.main-header p a:hover {
+    background-color: rgba(255,255,255,0.2); /* 少し背景を変えてホバー感 */
+}
+
+
 
 .main-header nav ul {
   list-style: none;

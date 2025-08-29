@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="./layout/css/test.css">
+    <link rel="stylesheet" type="text/css" href="../layout/css/test.css">
     <title>新規登録</title>
 </head>
 <body class="login_body">
@@ -90,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
     </form>
     <br>
     <a href="login.php">すでにアカウントをお持ちですか？ログインはこちら</a>
+    <a href="before_login.php">戻る</a>
 </div>
 
 </body>
