@@ -66,9 +66,10 @@ if (isset($_GET['registered'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./layout/css/test.css">
     <title>ログイン</title>
 </head>
-<body>
+<body class="login_body">
 
 <div class="container">
     <?php if ($is_logged_in): ?>
@@ -92,10 +93,10 @@ if (isset($_GET['registered'])) {
         <form action="" method="post">
             <input type="text" name="identifier" placeholder="ユーザー名またはメールアドレス" required><br><br>
             <input type="password" name="password" placeholder="パスワード" required><br><br>
-            <button type="submit" name="login">ログイン</button>
+            <button type="submit" name="login" class="login_button">ログイン</button>
         </form>
         <br>
-        <a href="register.php">アカウントをお持ちではありませんか？新規登録はこちら</a>
+        <a href="Registry.php">アカウントをお持ちではありませんか？新規登録はこちら</a>
     <?php endif; ?>
 </div>
 
