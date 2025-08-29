@@ -1,0 +1,135 @@
+/* ========== 全体のリセット & ベース ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Helvetica Neue", "Hiragino Sans", "Meiryo", sans-serif;
+  line-height: 1.7;
+  background: #fafafa;
+  color: #333;
+}
+
+/* ========== ヘッダー ========== */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 2rem;
+  background: #4a90e2;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.site-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.auth-links a {
+  margin-left: 1rem;
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+  transition: opacity 0.2s ease;
+}
+
+.auth-links a:hover {
+  opacity: 0.8;
+}
+
+/* ========== Hero セクション ========== */
+.hero {
+  text-align: center;
+  padding: 5rem 2rem;
+  background: linear-gradient(to right, #4a90e2, #6fc3f7);
+  color: #fff;
+}
+
+.hero h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* ========== サイト紹介 ========== */
+.intro {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+
+.intro h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #4a90e2;
+  text-align: center;
+}
+
+.intro p {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.intro .highlight {
+  background: #fff4c2;
+  padding: 0 0.3rem;
+  border-radius: 4px;
+}
+
+/* ========== CTAセクション ========== */
+.cta {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #f0f8ff;
+}
+
+.cta h2 {
+  font-size: 1.6rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.cta .btn {
+  display: inline-block;
+  margin: 0.5rem;
+  padding: 0.8rem 1.6rem;
+  background: #4a90e2;
+  color: #fff;
+  font-size: 1rem;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.cta .btn:hover {
+  background: #357ab7;
+  transform: translateY(-2px);
+}
+
+.cta .btn.secondary {
+  background: #6fc3f7;
+}
+
+.cta .btn.secondary:hover {
+  background: #4faee0;
+}
+
+/* ========== フッター ========== */
+.footer {
+  text-align: center;
+  padding: 1rem;
+  background: #4a90e2;
+  color: #fff;
+  margin-top: 3rem;
+  font-size: 0.9rem;
+}
