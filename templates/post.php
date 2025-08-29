@@ -291,7 +291,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <label for="comment">コメント（最大20文字）</label>
-        <input type="text" name="comment" id="comment" maxlength="20" required value="<?php echo htmlspecialchars($comment); ?>">
+        <input type="text" name="comment" id="comment" maxlength="20" 　placeholder="例：今日のお出かけコーデ"　required value="<?php echo htmlspecialchars($comment); ?>">
 
         <div class="form-actions">
             <!-- 投稿するボタンはフォーム内に残す -->
