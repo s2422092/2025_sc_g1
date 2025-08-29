@@ -24,9 +24,10 @@ body {
 .main-header nav ul {
   list-style: none;
   display: flex;
-  gap: 20px;
+  gap: 40px;
   margin: 0;
   padding: 0;
+  font-size: 25px;
 }
 
 .main-header nav a {
@@ -57,7 +58,7 @@ body {
 .main-nav-under ul {
   list-style: none;
   display: flex;
-  gap: 30px;
+  gap: 300px;
   margin: 0;
   padding: 0;
 }
@@ -66,7 +67,7 @@ body {
   color: white;
   text-decoration: none;
   font-family: sans-serif;
-  font-size: 14px;
+  font-size: 25px;
   transition: color 0.2s;
 }
 
