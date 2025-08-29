@@ -55,16 +55,18 @@
 
 /* ====== ヘッダー ====== */
 .main-header {
-  background-color: #e0e0e0;  /* 薄い灰色 */
+  background-color: #e0e0e0;
   height: 15px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 20px;              /* 内側余白で高さを出す */
+  justify-content: center; /* ←中央寄せに変更 */
+  padding: 20px;
 }
+
 
 .main-header h1 {
   margin: 0;
+  color : white;                /* 白いフォント */
 }
 
 .main-header nav ul {
@@ -76,7 +78,7 @@
 }
 
 .main-header nav a {
-  color: gray;                /* 灰色のフォント */
+  color: white;                /* 灰色のフォント */
   text-decoration: none;
   font-weight: 500;
 }
@@ -103,7 +105,7 @@
 }
 
 .main-nav-under a {
-  color: gray;
+  color: white;
   text-decoration: none;
   font-family: sans-serif;   /* 簡単な感じのフォント */
   font-size: 14px;
