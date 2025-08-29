@@ -22,50 +22,88 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* ナビは中央表示 */
-/* 通常リンク */
+
+/* 検索ボックス（左端固定） */
+.search-box {
+  flex: 0 0 auto;   /* サイズ固定 */
+  margin-right: auto; /* 強制的に左端 */
+}
+
+.search-input {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.search-input:focus {
+  border-color: #666;
+}
+
+.search-button {
+  padding: 5px 12px;
+  margin-left: 5px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.search-button:hover {
+  background-color: #666;
+}
+
+.main-header nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;     /* 基本は中央寄せ */
+  transform: translateX(-130px); /* 左に40pxずらす（好みに調整） */
+}
+
+
 .main-header nav a {
-  color: #666;               /* 通常は中くらいの灰色 */
+  color: #666;
   text-decoration: none;
   font-weight: 500;
-  padding: 8px 16px;         /* リンク周りに余白を追加 */
-  border-radius: 8px;        /* 少し角丸に */
+  padding: 8px 16px;
+  border-radius: 8px;
   transition: all 0.2s;
 }
 
-/* ホバー時 */
 .main-header nav a:hover {
-  background-color: #555;    /* 濃い灰色で背景を変える */
-  color: #fff;               /* 文字は白で読みやすく */
+  background-color: #555;
+  color: #fff;
 }
 
-/* アクティブリンク */
 .main-header nav a.active {
-  background-color: #333;    /* 濃い灰色で背景を強調 */
-  color: #fff;               /* 文字は白に */
+  background-color: #333;
+  color: #fff;
   font-weight: 700;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* 少し浮いてる感 */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
-
 
 /* ユーザー名を右上に固定 */
 .main-header h1 {
     position: absolute;
-    top: 10px;          /* 上から10px */
-    right: 20px;        /* 右から20px */
+    top: 10px;
+    right: 20px;
     margin: 0;
     color: white;
     font-size: 24px;
     font-weight: 600;
 }
 
-/* ログアウトリンクをh1の下に配置 */
+/* ログアウトリンクを h1 の下に配置 */
 .main-header p {
     position: absolute;
-    top: 44px;          /* h1の下に20pxくらい余白を取る */
+    top: 44px;
     right: 20px;
     margin: 0;
 }
+
 
 .main-header p a {
     color: white;
@@ -392,7 +430,86 @@ body {
   cursor: pointer;
 }
 
+#complimentSelect-wrapper {
+    position: relative;
+    margin-bottom: 10px;
+}
 
+#complimentSelect {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+#complimentSelect:hover {
+    border-color: #999;
+    background-color: #fff;
+}
+
+#complimentSelect:focus {
+    outline: none;
+    border-color: #666;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    background-color: #fff;
+}
+
+#complimentSelect-wrapper::after {
+    content: '▼';
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #666;
+}
+
+    .compliment-summary {
+      margin: 20px;
+      font-family: sans-serif;
+    }
+    .compliment-item {
+      border-bottom: 1px solid #ccc;
+      padding: 10px 0;
+    }
+    .compliment-title {
+      cursor: pointer;
+      font-weight: bold;
+      color: #333;
+      transition: color 0.2s;
+    }
+    .compliment-title:hover {
+      color: #555;
+    }
+    .compliment-users {
+      margin-left: 20px;
+      margin-top: 5px;
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+      max-height: 150px;      /* 最大高さを設定 */
+      overflow-y: auto;       /* 縦スクロールを有効化 */
+      padding-right: 5px;     /* スクロールバー分の余白 */
+    }
+    .compliment-users p {
+      margin: 3px 0;
+      font-size: 14px;
+      color: #444;
+    }
+
+
+
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
 /* ====== レスポンシブ ====== */
 @media screen and (max-width: 900px) {
   .main-content {
