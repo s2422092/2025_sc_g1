@@ -185,10 +185,7 @@ body {
   transform: scale(1.05);
 }
 
-/* ====== コメント欄 ====== */
-.comment-box {
-  background: #fff;
-}
+
 
 .comment-area {
   width: 100%;
@@ -209,6 +206,78 @@ body {
   border-color: #ef2a41;
   background: #fff;
 }
+
+/* ====== コメント一覧 & 投稿ボタン ====== */
+.comment-list {
+    margin-top: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.comment-list .comment-item {
+    background: #f0f0f0;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    word-wrap: break-word;
+}
+
+.comment-submit {
+    margin-top: 5px;
+    padding: 6px 12px;
+    border: none;
+    background-color: #ef2a41;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.comment-submit:hover {
+    background-color: #d92038;
+}
+
+/* コメントヘッダー横並び */
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.comment-expand-btn {
+    padding: 4px 8px;
+    font-size: 12px;
+    border: none;
+    background-color: #ef2a41;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.comment-expand-btn:hover {
+    background-color: #d92038;
+}
+
+/* コメント欄拡大時 */
+.comment-box.expanded {
+    width: 90%; /* 大きくなる */
+    max-width: 600px;
+}
+
+.comment-box.expanded .comment-area {
+    height: 200px; /* 高さを拡大 */
+    font-size: 16px;
+}
+
+.comment-box.expanded .comment-list {
+    max-height: 300px; /* コメントリストも拡大 */
+}
+
 
 /* ====== レスポンシブ ====== */
 @media screen and (max-width: 900px) {
