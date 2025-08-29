@@ -196,19 +196,41 @@ body {
   justify-content: flex-start; /* 上から積む */
 }
 
+/* コメント入力とボタンを横並びにするラッパー */
+.comment-input {
+  display: flex;
+  align-items: flex-start; /* 上揃えにする（textarea の上端とボタンの上端を揃える） */
+  gap: 8px; /* 余白 */
+}
+
+/* テキストエリア */
 .comment-area {
-  height: 50px;          /* テキストエリアの高さ固定 */
-  flex-shrink: 0;         /* 親要素の影響で潰れないように */
-  width: 100%;
+  flex: 1;                /* 横幅いっぱいに広がる */
+  min-height: 30px;      /* 縦の大きさ */
   border: 2px solid #ddd;
   border-radius: 8px;
   background: #fafafa;
-  margin-top: 10px;
   padding: 10px;
   font-size: 14px;
   color: #333;
   outline: none;
   resize: none;
+}
+
+/* 投稿ボタン */
+.comment-submit {
+  padding: 8px 14px;
+  border: none;
+  background-color: #ef2a41;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  height: 30px;          /* textarea と高さを揃える */
+}
+
+.comment-submit:hover {
+  background-color: #d92038;
 }
 
 .comment-area:focus {
