@@ -26,29 +26,73 @@
 
     // データベース接続
     $dbconn = pg_connect("host=localhost dbname=yuisuga user=yuisuga password=R9ixwMq0") or die('Could not connect: ' . pg_last_error());
-    $query_us = "SELECT u.uid, u.uname, u.email, u.profileImage, u.height, f.follow_id, f.follower_uid, f.followee_uid, f.created_at FROM userauth AS u JOIN user_follow AS f ON u.uid = f.follow_id WHERE u.uid =" . $userId . ";"; 
-    $query_ps = "SELECT post_id, uid, post_text, coordinateImage_path, created_at FROM post_coordinate WHERE u.uid = " . $userId . ";";
+    
+    // ユーザー情報
+    $query_us = "SELECT uid, uname, email, profileImage, height FROM userauth WHERE uid =  $userId;"; 
     $result_us = pg_query($query_us) or die('Query failed: ' . pg_last_error()); 
 
-    // ユーザー情報
+    if (!$dbconn) {
+    die("データベース接続に失敗しました");
+    }
+
+    while ($line = pg_fetch_array($result_us)) {
     $username = $line['uname'];    
     $userprofile_image = $line['profileImage'];    
-    $userheight =  $line['height'];  
-
-    // 投稿履歴
-    $post_id = $line['post_id'];
-    $post_text = $line['post_text'];
-    $post_image = $line['coordinateImage_path'];
-    $post_date = $line['created_at'];
+    $userheight =  $line['height'];
+    }
 
     // フォロー一覧
+    $query_fl = "SELECT u.uid, u.uname, u.profileImage, f.follow_id, f.follower_uid, f.followee_uid, f.created_at FROM userauth AS u JOIN user_follow AS f ON u.uid =  f.followee_uid WHERE f.follower_uid = $userId;";
+    $result_fl = pg_query($query_fl) or die('Query failed: ' . pg_last_error()); 
     
+    if (!$dbconn) {
+    die("データベース接続に失敗しました");
+    }
+
+    while ($line = pg_fetch_array($result_ls)) {
+    $followee_profileImage = $line['profileImage']
+    $followee_name = $line['uname']//フォロー名
+    }
+
+    // 投稿履歴
+    $query_ps = "SELECT u.uid, u.uname, p.post_id, p.uid, p.post_text, p.coordinateImage_path, p.created_at FROM  userauth AS u JOIN post_coordinate AS p ON u.uid = p.uid WHERE u.uid = $userId;";
+    $result_ps = pg_query($query_ps) or die('Query failed: ' . pg_last_error()); 
+
+    if (!$dbconn) {
+    die("データベース接続に失敗しました");
+    }
+
+    while ($line = pg_fetch_array($result_ps)) {
+    $uname = $line['uname']; //名前
+    $post_text = $line['post_text']; //投稿内容
+    $post_image = $line['coordinateImage_path'];//投稿画像
+    $post_date = $line['created_at'];//投稿日時
+    }
+
+    
+    pg_close($dbconn);
     ?>
-    <div class="maindata">
+    <div class="userdata">
         <div>
         <p><strong>ユーザー名：</strong></p>
         <p><strong>メール：</strong></p>
         <p><strong>登録日：</strong></p>
         </div>
+    </div>
+    <div class="post_history">
+        <details>
+            <summary>投稿履歴</summary>
+            <p>name</p>
+            <p>text</p>
+            <p>image</p>
+            <p>date</p>
+        </details>    
+    </div>
+    <div class="follow_list">
+        <details>
+            <summary>フォロー一覧</summary>
+            <p>image</p>
+            <p>name</p>
+        </details>    
     </div>
     
