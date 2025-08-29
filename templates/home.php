@@ -1,3 +1,13 @@
+<?php
+session_start(); // セッションを開始
+
+// ログインしていなければログインページにリダイレクト
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -20,7 +30,7 @@
         </nav>        
 
         <h1>マイページへようこそ、<?php echo htmlspecialchars($_SESSION['user_name']); ?>さん！</h1>
-        
+
     </header>
 
     <!-- 写真＋右側 -->
