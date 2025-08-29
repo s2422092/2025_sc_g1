@@ -66,7 +66,7 @@ if (isset($_GET['registered'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="./layout/css/test.css">
+    <link rel="stylesheet" type="text/css" href="../layout/css/test.css">
     <title>ログイン</title>
 </head>
 <body class="login_body">
@@ -97,6 +97,7 @@ if (isset($_GET['registered'])) {
         </form>
         <br>
         <a href="Registry.php">アカウントをお持ちではありませんか？新規登録はこちら</a>
+        <a href="before_login.php">戻る</a>
     <?php endif; ?>
 </div>
 
