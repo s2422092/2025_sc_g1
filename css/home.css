@@ -315,6 +315,19 @@ body {
   right: 0;              /* スライドイン */
 }
 
+/* 閉じるボタンをモーダルの高さ中央に配置 */
+#closeModal {
+  position: absolute;
+  top: 50%;              /* 上から50% */
+  left: 0%;             /* 横中央 */
+  transform: translate(-50%, -50%); /* ちょうど中央に */
+  padding: 8px 16px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
 
 /* ====== レスポンシブ ====== */
