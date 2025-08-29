@@ -392,6 +392,47 @@ body {
   cursor: pointer;
 }
 
+#complimentSelect-wrapper {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+#complimentSelect {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+#complimentSelect:hover {
+    border-color: #999;
+    background-color: #fff;
+}
+
+#complimentSelect:focus {
+    outline: none;
+    border-color: #666;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    background-color: #fff;
+}
+
+#complimentSelect-wrapper::after {
+    content: '▼';
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #666;
+}
+
 
 /* ====== レスポンシブ ====== */
 @media screen and (max-width: 900px) {

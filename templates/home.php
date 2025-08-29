@@ -76,16 +76,19 @@ try {
                     <h2>コメント欄</h2>
                 </div>
                 
-            <div class="comment-input">
-                <select id="complimentSelect">
-                    <option value="">褒め言葉を選択</option>
-                    <?php foreach ($compliments as $c): ?>
-                        <option value="<?= htmlspecialchars($c) ?>"><?= htmlspecialchars($c) ?></option>
-                    <?php endforeach; ?>
-                </select>
-                
-                <button class="comment-submit">投稿</button>
-            </div>
+                <div class="comment-input">
+                    <div id="complimentSelect-wrapper">
+                        <select id="complimentSelect">
+                            <option value="">褒め言葉を選択</option>
+                            <?php foreach ($compliments as $c): ?>
+                                <option value="<?= htmlspecialchars($c) ?>"><?= htmlspecialchars($c) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <button class="comment-submit">投稿</button>
+                </div>
+
+
 
 
                 <p>ここに褒め言葉を表示</p>
@@ -99,16 +102,20 @@ try {
             <div class="comment-header">
                 <h2>コメント欄</h2>
             </div>
-            <div class="comment-input">
-                <select id="complimentSelect">
-                    <option value="">褒め言葉を選択</option>
-                    <?php foreach ($compliments as $c): ?>
-                        <option value="<?= htmlspecialchars($c) ?>"><?= htmlspecialchars($c) ?></option>
-                    <?php endforeach; ?>
-                </select>
 
+            <div class="comment-input">
+                <div id="complimentSelect-wrapper">
+                    <select id="complimentSelect">
+                        <option value="">褒め言葉を選択</option>
+                        <?php foreach ($compliments as $c): ?>
+                            <option value="<?= htmlspecialchars($c) ?>"><?= htmlspecialchars($c) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
                 <button class="comment-submit">投稿</button>
             </div>
+
+
 
             <p>ここに褒め言葉を表示</p>
             <div class="comment-list"></div>
@@ -143,6 +150,7 @@ userFollowSection.addEventListener('dblclick', () => {
 modal.addEventListener('dblclick', () => {
   modal.classList.remove('active'); // 閉じる
 });
+
 </script>
 
 
