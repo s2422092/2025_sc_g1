@@ -1,7 +1,6 @@
 /* ====== ヘッダー ====== */
 .main-header {
   background-color: #e0e0e0;
-  height: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,7 +24,6 @@
 /* ====== 下のナビ ====== */
 .main-nav-under {
   background-color: #e0e0e0;
-  height: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,31 +48,32 @@
   font-size: 14px;
 }
 
+/* ====== メインコンテンツ ====== */
+.main-content {
+  display: flex;                
+  justify-content: flex-end;    /* 右寄せ */
+  align-items: flex-start;       
+  gap: 75px;                    
+  margin: 40px auto 0;          /* 上マージンのみ、左右は自動 */
+  max-width: 1200px;
+  position: relative;            
+}
+
 
 
 /* ====== 写真表示エリア ====== */
 .photo-section {
   display: flex;
-  align-items: center;   /* 縦方向の中央揃え */
-  justify-content: center; /* 横方向の中央揃え */
-  gap: 20px;
-
+  align-items: center;         /* 縦中央 */
+  justify-content: center;     /* 横中央 */
+  gap: 20px;                   /* 矢印とテキストの間隔 */
   width: 400px;
   height: 600px;
   border: 2px solid black;
   border-radius: 12px;
   background: #fdfdfd;
-
-  margin: 0 auto;  /* ページ全体で中央配置 */
   position: relative;
 }
-
-.photo-section h1 {
-  margin: 0;
-  font-size: 1.2rem;
-  color: #333;
-}
-
 
 /* 矢印 */
 .arrow-right {
@@ -83,6 +82,7 @@
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
   border-left: 25px solid black;
+  cursor: pointer;
 }
 
 .arrow-left {
@@ -91,9 +91,17 @@
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
   border-right: 25px solid black;
+  cursor: pointer;
 }
 
-/* ====== ユーザー情報 & フォロー & コメント欄 ====== */
+/* 写真表示テキスト */
+.photo-section h1 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+  text-align: center;
+}
+
 /* ====== ユーザー情報 & フォロー & コメント欄 ====== */
 .user-follow-section {
   display: flex;
@@ -156,4 +164,3 @@
   border-color: #ef2a41;
   background: #fff;
 }
-
