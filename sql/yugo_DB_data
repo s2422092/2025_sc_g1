@@ -1,0 +1,4 @@
+$host = 'localhost';
+$dbname = 's2422092'; // DB名
+$user = 's2422092';   // DBユーザー
+$password = 'h9iIMy9t'; // DBパスワード
