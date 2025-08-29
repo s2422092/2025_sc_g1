@@ -42,13 +42,23 @@ try {
 <body>
 
     <header class="main-header">
-    <nav class="right">
-        <ul>
-            <li><a href="home_follow.php" class="<?php if(basename($_SERVER['PHP_SELF']) == 'home_follow.php'){ echo 'active'; } ?>">フォロー</a></li>
-            <li><a href="home.php" class="<?php if(basename($_SERVER['PHP_SELF']) == 'home.php'){ echo 'active'; } ?>">おすすめ</a></li>
-        </ul>
-    </nav>
-  
+        <!-- 🔍 検索ボックス（左側） -->
+        <div class="search-box">
+            <form action="search.php" method="get">
+                <input type="text" name="q" placeholder="検索..." class="search-input">
+                <button type="submit" class="search-button">検索</button>
+            </form>
+        </div>
+
+        <!-- ナビ（従来通り右寄せに見えるが実際は中央寄り） -->
+        <nav class="right">
+            <ul>
+                <li><a href="home_follow.php" class="<?php if(basename($_SERVER['PHP_SELF']) == 'home_follow.php'){ echo 'active'; } ?>">フォロー</a></li>
+                <li><a href="home.php" class="<?php if(basename($_SERVER['PHP_SELF']) == 'home.php'){ echo 'active'; } ?>">おすすめ</a></li>
+            </ul>
+        </nav>
+
+        <!-- 絶対配置のユーザー名＆ログアウト -->
         <p><a href="logout.php">ログアウト</a></p>
         <h1><?php echo htmlspecialchars($_SESSION['user_name']); ?>さん</h1>
     </header>

@@ -41,6 +41,14 @@ try {
 <body>
     
     <header class="main-header">
+
+    <div class="search-box">
+        <form action="#" method="get">
+            <input type="text" name="q" placeholder="検索..." class="search-input">
+            <button type="submit" class="search-button">検索</button>
+        </form>
+    </div>
+
     <nav class="right">
         <ul>
             <li><a href="home_follow.php" class="<?php if(basename($_SERVER['PHP_SELF']) == 'home_follow.php'){ echo 'active'; } ?>">フォロー</a></li>
