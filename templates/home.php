@@ -18,6 +18,9 @@
                 <li><a href="home.php">おすすめ</a></li>
             </ul>
         </nav>        
+
+        <h1>マイページへようこそ、<?php echo htmlspecialchars($_SESSION['user_name']); ?>さん！</h1>
+        
     </header>
 
     <!-- 写真＋右側 -->
