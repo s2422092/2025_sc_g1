@@ -57,10 +57,16 @@ if (!isset($_SESSION['user_id'])) {
                     <h2>コメント欄</h2>
                 </div>
                 
-                <div class="comment-input">
-                <textarea class="comment-area" placeholder="コメントを入力"></textarea>
+            <div class="comment-input">
+                <select id="complimentSelect">
+                    <option value="">褒め言葉を選択</option>
+                    <?php foreach ($compliments as $c): ?>
+                        <option value="<?= htmlspecialchars($c) ?>"><?= htmlspecialchars($c) ?></option>
+                    <?php endforeach; ?>
+                </select>
+                
                 <button class="comment-submit">投稿</button>
-                </div>
+            </div>
 
 
                 <p>ここに褒め言葉を表示</p>
@@ -75,7 +81,13 @@ if (!isset($_SESSION['user_id'])) {
                 <h2>コメント欄</h2>
             </div>
             <div class="comment-input">
-                <textarea class="comment-area" placeholder="コメントを入力"></textarea>
+                <select id="complimentSelect">
+                    <option value="">褒め言葉を選択</option>
+                    <?php foreach ($compliments as $c): ?>
+                        <option value="<?= htmlspecialchars($c) ?>"><?= htmlspecialchars($c) ?></option>
+                    <?php endforeach; ?>
+                </select>
+                
                 <button class="comment-submit">投稿</button>
             </div>
             <p>ここに褒め言葉を表示</p>
