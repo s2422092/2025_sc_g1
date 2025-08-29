@@ -180,6 +180,8 @@ body {
 }
 
 .follow-box:hover {
+  width: 100%;
+  height: 300px;
   background: #d92038;
   color: white;
   transform: scale(1.05);
@@ -187,9 +189,17 @@ body {
 
 
 
+.comment-box {
+  height: 450px;          /* ボックスの高さ固定 */
+  display: flex;          /* 中身を縦方向に配置 */
+  flex-direction: column;
+  justify-content: flex-start; /* 上から積む */
+}
+
 .comment-area {
+  height: 50px;          /* テキストエリアの高さ固定 */
+  flex-shrink: 0;         /* 親要素の影響で潰れないように */
   width: 100%;
-  height: 300px;
   border: 2px solid #ddd;
   border-radius: 8px;
   background: #fafafa;
@@ -199,7 +209,6 @@ body {
   color: #333;
   outline: none;
   resize: none;
-  transition: border-color 0.2s, background 0.2s;
 }
 
 .comment-area:focus {
