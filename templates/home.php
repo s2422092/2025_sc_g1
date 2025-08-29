@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>ホーム</title>
-    <link rel="stylesheet" href="/~s_yugo/sc2025/2025_sc_g1/css/home.css">
+    <link rel="stylesheet" href="../layout/css/home.css">
+
 
 
 
