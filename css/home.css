@@ -5,6 +5,7 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .main-header nav ul {
@@ -19,6 +20,11 @@
   color: white;
   text-decoration: none;
   font-weight: 500;
+  transition: color 0.2s;
+}
+
+.main-header nav a:hover {
+  color: #ffefef;
 }
 
 /* ====== 下のナビ ====== */
@@ -31,6 +37,8 @@
   position: fixed;
   bottom: 0;
   width: 100%;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+  z-index: 100;
 }
 
 .main-nav-under ul {
@@ -46,60 +54,68 @@
   text-decoration: none;
   font-family: sans-serif;
   font-size: 14px;
+  transition: color 0.2s;
+}
+
+.main-nav-under a:hover {
+  color: #ffefef;
 }
 
 /* ====== メインコンテンツ ====== */
 .main-content {
-  display: flex;                
-  justify-content: flex-end;    /* 右寄せ */
-  align-items: flex-start;       
-  gap: 75px;                    
-  margin: 40px auto 0;          /* 上マージンのみ、左右は自動 */
+  display: flex;
+  justify-content: flex-end;  /* 右寄せ */
+  align-items: flex-start;
+  gap: 50px;
+  margin: 40px auto 0;
   max-width: 1200px;
-  position: relative;            
+  flex-wrap: wrap;            /* 画面幅が狭いと折り返す */
 }
-
-
 
 /* ====== 写真表示エリア ====== */
 .photo-section {
   display: flex;
-  align-items: center;         /* 縦中央 */
-  justify-content: center;     /* 横中央 */
-  gap: 20px;                   /* 矢印とテキストの間隔 */
+  align-items: center;         
+  justify-content: center;     
+  gap: 20px;                  
   width: 400px;
   height: 600px;
-  border: 2px solid black;
+  border: 2px solid #ccc;
   border-radius: 12px;
   background: #fdfdfd;
   position: relative;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-/* 矢印 */
-.arrow-right {
-  width: 0;
-  height: 0;
-  border-top: 15px solid transparent;
-  border-bottom: 15px solid transparent;
-  border-left: 25px solid black;
-  cursor: pointer;
-}
-
-.arrow-left {
-  width: 0;
-  height: 0;
-  border-top: 15px solid transparent;
-  border-bottom: 15px solid transparent;
-  border-right: 25px solid black;
-  cursor: pointer;
-}
-
-/* 写真表示テキスト */
 .photo-section h1 {
   margin: 0;
   font-size: 1.2rem;
   color: #333;
   text-align: center;
+}
+
+/* 矢印 */
+.arrow-right, .arrow-left {
+  width: 0;
+  height: 0;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.arrow-right {
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left: 25px solid black;
+}
+
+.arrow-left {
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-right: 25px solid black;
+}
+
+.arrow-right:hover, .arrow-left:hover {
+  transform: scale(1.2);
 }
 
 /* ====== ユーザー情報 & フォロー & コメント欄 ====== */
@@ -117,7 +133,15 @@
   background: #fff;
   border-radius: 12px;
   padding: 16px 20px;
-  box-shadow: 0 3px 8px rgba(255, 255, 255, 0.08);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.user-follow-section > div:hover,
+.follow-box:hover,
+.comment-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
 }
 
 .user-follow-section h2,
@@ -129,19 +153,26 @@
   font-weight: 600;
 }
 
-/* フォロー枠 */
+/* ====== フォローボタン ====== */
 .follow-box {
   background: #ef2a41;
-  color: white;
+  color: white;              
   text-align: center;
   cursor: pointer;
-  transition: 0.2s;
-}
-.follow-box:hover {
-  background: #d92038;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 0;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
-/* コメント欄 */
+.follow-box:hover {
+  background: #d92038;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* ====== コメント欄 ====== */
 .comment-box {
   background: #fff;
 }
@@ -158,9 +189,23 @@
   color: #333;
   outline: none;
   resize: none;
-  transition: 0.2s;
+  transition: border-color 0.2s, background 0.2s;
 }
+
 .comment-area:focus {
   border-color: #ef2a41;
   background: #fff;
+}
+
+/* ====== レスポンシブ ====== */
+@media screen and (max-width: 900px) {
+  .main-content {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .photo-section, .user-follow-section {
+    width: 90%;
+    max-width: 400px;
+  }
 }
