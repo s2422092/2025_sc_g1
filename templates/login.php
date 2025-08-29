@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                 $_SESSION['user_name'] = $user['uname'];
                 $message = 'ログインに成功しました！';
                 // ログイン後のページにリダイレクトする場合は、以下のコメントを外す
-                header('Location: mypage.php');
+                header('Location: home.php');
                 exit;
             } else {
                 // パスワードが一致しない
