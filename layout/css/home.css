@@ -23,9 +23,30 @@ body {
 }
 
 /* ナビは中央表示 */
-.main-header nav {
-    z-index: 1; /* h1 の下に表示されないように */
+/* 通常リンク */
+.main-header nav a {
+  color: #666;               /* 通常は中くらいの灰色 */
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 16px;         /* リンク周りに余白を追加 */
+  border-radius: 8px;        /* 少し角丸に */
+  transition: all 0.2s;
 }
+
+/* ホバー時 */
+.main-header nav a:hover {
+  background-color: #555;    /* 濃い灰色で背景を変える */
+  color: #fff;               /* 文字は白で読みやすく */
+}
+
+/* アクティブリンク */
+.main-header nav a.active {
+  background-color: #333;    /* 濃い灰色で背景を強調 */
+  color: #fff;               /* 文字は白に */
+  font-weight: 700;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* 少し浮いてる感 */
+}
+
 
 /* ユーザー名を右上に固定 */
 .main-header h1 {

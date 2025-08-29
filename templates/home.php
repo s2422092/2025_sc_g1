@@ -21,14 +21,15 @@ if (!isset($_SESSION['user_id'])) {
 </head>
 
 <body>
-    
+
     <header class="main-header">
-        <nav class="right">
-            <ul>
-                <li><a href="#">フォロー</a></li>
-                <li><a href="home.php">おすすめ</a></li>
-            </ul>
-        </nav>        
+    <nav class="right">
+        <ul>
+            <li><a href="home_follow.php" class="<?php if(basename($_SERVER['PHP_SELF']) == 'home_follow.php'){ echo 'active'; } ?>">フォロー</a></li>
+            <li><a href="home.php" class="<?php if(basename($_SERVER['PHP_SELF']) == 'home.php'){ echo 'active'; } ?>">おすすめ</a></li>
+        </ul>
+    </nav>
+  
 
         <h1><?php echo htmlspecialchars($_SESSION['user_name']); ?>さん</h1>
     </header>
