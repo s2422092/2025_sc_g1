@@ -1,6 +1,19 @@
+/* ====== リセット & ボディ ====== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  background-color: #f5f5f5; /* ページ全体の背景色 */
+  color: #333;
+}
+
 /* ====== ヘッダー ====== */
 .main-header {
-  background-color: #e0e0e0;
+  background-color: #9f9e9e;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,7 +42,7 @@
 
 /* ====== 下のナビ ====== */
 .main-nav-under {
-  background-color: #e0e0e0;
+  background-color: #9f9e9e;
   display: flex;
   align-items: center;
   justify-content: center;
