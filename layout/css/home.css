@@ -522,6 +522,21 @@ body {
   text-align: center;
 }
 
+.modal-user-details {
+  margin-top: 10px;
+}
+
+.photo-scroll {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.5s ease; /* 滑らかにスライド */
+}
+
+.photo-slide {
+  min-width: 300px;
+  flex-shrink: 0;
+}
+
 
     @keyframes fadeIn {
       from {opacity: 0;}
