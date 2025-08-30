@@ -14,6 +14,10 @@ $dbname = 's_yugo';
 $user = 's_yugo';
 $password = '9fjrtvAy';
 
+$uploadDir = 'uploads/';
+$savedFiles[] = $uploadDir . basename($filename); // "uploads/ファイル名"
+
+
 try {
     $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -35,12 +39,34 @@ try {
 
     // 🔽 各投稿に「フォロー済み」フラグを追加
     foreach ($posts as &$post) {
-        $post['is_following'] = in_array((int)$post['uid'], $followed_ids);
+        echo '<script>';
+        echo 'console.log("coordinateImage_path:", ' . json_encode($post['coordinateimage_path']) . ');';
+        echo '</script>';
+
+        $paths = trim($post['coordinateimage_path'], '{}');
+        $post['coordinateImage_array'] = $paths ? explode(',', $paths) : [];
     }
 
     // 褒め言葉一覧
     $stmt = $pdo->query("SELECT compliment_text FROM compliment_list ORDER BY compliment_id");
     $compliments = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+    // 投稿とユーザー情報を取得
+    $stmt = $pdo->query("
+        SELECT p.post_id, p.post_text, p.coordinateImage_path, u.uid, u.uname, u.profileImage, u.height, u.frame
+        FROM post_coordinate p
+        JOIN userauth u ON p.uid = u.uid
+        ORDER BY p.created_at DESC
+    ");
+    $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // 画像パスを配列に変換
+    foreach ($posts as &$post) {
+        // PostgreSQL の配列は "{a,b,c}" 形式で返ってくるので処理
+        $paths = trim($post['coordinateimage_path'], '{}');
+        $post['coordinateImage_array'] = $paths ? explode(',', $paths) : [];
+    }
+
 
 } catch (PDOException $e) {
     die("DB接続エラー: " . $e->getMessage());
@@ -54,10 +80,6 @@ try {
     <meta charset="UTF-8">
     <title>ホーム</title>
     <link rel="stylesheet" href="../layout/css/home.css">
-
-
-
-
 </head>
 
 <body>
@@ -90,8 +112,23 @@ try {
         <!-- 写真表示セクション -->
         <div class="arrow-left"></div>
         <div class="photo-section">
-            <h1>写真の表示</h1>
+            <!-- 写真表示セクション -->
+            <div class="photo-section">
+                <div>
+                    <h2>テスト画像の表示</h2>
+                    <img id="main-image" 
+                        src="<?= !empty($posts[0]['coordinateImage_array'][0]) 
+                                    ? htmlspecialchars($posts[0]['coordinateImage_array'][0], ENT_QUOTES) 
+                                    : 'uploads/default.png' ?>" 
+                        alt="投稿画像" 
+                        class="post-image"
+                        style="width:300px; height:auto;">
+                </div>
+            </div>
+
         </div>
+
+
         <div class="arrow-right"></div>
 
         <!-- ユーザー情報・フォロー・コメント欄 -->
@@ -113,7 +150,6 @@ try {
                 </div>
             <?php endforeach; ?>
         </div>
-
 
         <div class="follow-box">
             <button id="followBtn" class="follow-button">フォロー</button>
@@ -286,35 +322,79 @@ document.querySelectorAll('.compliment-title').forEach(item => {
 const posts = <?php echo json_encode($posts); ?>;
 const scrollContainer = document.querySelector('.photo-scroll');
 const followBtn = document.getElementById('followBtn');
+const mainImage = document.getElementById('main-image'); // メイン画像タグ取得
 
+let currentPostIndex = 0;       // 表示中の投稿のインデックス
+let currentImageIndex = 0;      // 投稿内で表示している画像のインデックス
+
+// 右矢印クリックで次の画像を表示
+document.querySelector('.arrow-right').addEventListener('click', () => {
+    const post = posts[currentPostIndex];
+
+    if (post.coordinateImage_array && post.coordinateImage_array.length > 0) {
+        currentImageIndex++;
+        if (currentImageIndex >= post.coordinateImage_array.length) {
+            currentImageIndex = 0; // 最後までいったら最初に戻す
+        }
+        mainImage.src = post.coordinateImage_array[currentImageIndex].trim();
+    }
+});
+
+// 左矢印クリックで前の画像を表示
+document.querySelector('.arrow-left').addEventListener('click', () => {
+    const post = posts[currentPostIndex];
+
+    if (post.coordinateImage_array && post.coordinateImage_array.length > 0) {
+        currentImageIndex--;
+        if (currentImageIndex < 0) {
+            currentImageIndex = post.coordinateImage_array.length - 1; // 最後に戻る
+        }
+        mainImage.src = post.coordinateImage_array[currentImageIndex].trim();
+    }
+});
+
+// 🔽 投稿が切り替わったときは画像インデックスをリセット
 function updateUserInfo(index) {
+    currentPostIndex = index;   // 今の投稿インデックスを保存
+    currentImageIndex = 0;      // 新しい投稿を見たら最初の画像に戻す
+
     const post = posts[index];
+    // プロフィール情報と最初の画像の表示
     const html = `
-        <img src="${post.profileImage || 'images/default.png'}" alt="プロフィール画像" style="width:80px;height:80px;border-radius:50%;">
+        <img src="${post.profileImage || 'uploads/default.png'}" alt="プロフィール画像" style="width:80px;height:80px;border-radius:50%;">
         <p><strong>${post.uname}</strong></p>
         <p>身長: ${post.height || '未設定'}</p>
         <p>体型: ${post.frame || '未設定'}</p>
     `;
     document.getElementById('user-details').innerHTML = html;
 
-    // 🔽 フォローボタンの表示を切り替え
+    if (post.coordinateImage_array && post.coordinateImage_array.length > 0) {
+        mainImage.src = post.coordinateImage_array[0].trim();
+    } else {
+        mainImage.src = 'uploads/default.png';
+    }
+
+    // フォローボタン制御
     if (post.is_following) {
         followBtn.innerText = 'フォロー済み';
-        followBtn.disabled = true; // 連打防止
+        followBtn.disabled = true;
     } else {
         followBtn.innerText = 'フォロー';
         followBtn.disabled = false;
     }
 }
 
+
 updateUserInfo(0); // 最初の投稿表示
 
+// スクロールでインデックス計算して情報更新
 scrollContainer.addEventListener('scroll', () => {
-    let index = Math.round(scrollContainer.scrollLeft / (300 + 20));
+    let index = Math.round(scrollContainer.scrollLeft / (300 + 20)); // 300px幅＋余白
     if (index < 0) index = 0;
     if (index >= posts.length) index = posts.length - 1;
     updateUserInfo(index);
 });
+
 
 // 🔽 フォローボタンクリック時
 followBtn.addEventListener('click', () => {
