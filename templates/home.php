@@ -324,10 +324,42 @@ const scrollContainer = document.querySelector('.photo-scroll');
 const followBtn = document.getElementById('followBtn');
 const mainImage = document.getElementById('main-image'); // メイン画像タグ取得
 
-function updateUserInfo(index) {
-    const post = posts[index];
+let currentPostIndex = 0;       // 表示中の投稿のインデックス
+let currentImageIndex = 0;      // 投稿内で表示している画像のインデックス
 
-    // 🔽 プロフィール情報切り替え
+// 右矢印クリックで次の画像を表示
+document.querySelector('.arrow-right').addEventListener('click', () => {
+    const post = posts[currentPostIndex];
+
+    if (post.coordinateImage_array && post.coordinateImage_array.length > 0) {
+        currentImageIndex++;
+        if (currentImageIndex >= post.coordinateImage_array.length) {
+            currentImageIndex = 0; // 最後までいったら最初に戻す
+        }
+        mainImage.src = post.coordinateImage_array[currentImageIndex].trim();
+    }
+});
+
+// 左矢印クリックで前の画像を表示
+document.querySelector('.arrow-left').addEventListener('click', () => {
+    const post = posts[currentPostIndex];
+
+    if (post.coordinateImage_array && post.coordinateImage_array.length > 0) {
+        currentImageIndex--;
+        if (currentImageIndex < 0) {
+            currentImageIndex = post.coordinateImage_array.length - 1; // 最後に戻る
+        }
+        mainImage.src = post.coordinateImage_array[currentImageIndex].trim();
+    }
+});
+
+// 🔽 投稿が切り替わったときは画像インデックスをリセット
+function updateUserInfo(index) {
+    currentPostIndex = index;   // 今の投稿インデックスを保存
+    currentImageIndex = 0;      // 新しい投稿を見たら最初の画像に戻す
+
+    const post = posts[index];
+    // プロフィール情報と最初の画像の表示
     const html = `
         <img src="${post.profileImage || 'uploads/default.png'}" alt="プロフィール画像" style="width:80px;height:80px;border-radius:50%;">
         <p><strong>${post.uname}</strong></p>
@@ -336,14 +368,13 @@ function updateUserInfo(index) {
     `;
     document.getElementById('user-details').innerHTML = html;
 
-    // 🔽 メイン画像切り替え
     if (post.coordinateImage_array && post.coordinateImage_array.length > 0) {
-        mainImage.src = post.coordinateImage_array[0].trim(); // 最初の画像を表示
+        mainImage.src = post.coordinateImage_array[0].trim();
     } else {
-        mainImage.src = 'uploads/default.png'; // デフォルト
+        mainImage.src = 'uploads/default.png';
     }
 
-    // 🔽 フォローボタンの表示を切り替え
+    // フォローボタン制御
     if (post.is_following) {
         followBtn.innerText = 'フォロー済み';
         followBtn.disabled = true;
@@ -352,6 +383,7 @@ function updateUserInfo(index) {
         followBtn.disabled = false;
     }
 }
+
 
 updateUserInfo(0); // 最初の投稿表示
 
