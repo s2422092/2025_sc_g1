@@ -175,6 +175,8 @@ try {
                 <button class="comment-submit">投稿</button>
             </div>
 
+             <h2>ユーザー情報</h2>
+            <div id="modal-user-details"><!-- JSで切り替える --></div>
 
 
                 <div class="compliment-summary">
@@ -268,6 +270,23 @@ function updateUserInfo(index) {
     `;
 }
 updateUserInfo(0);
+
+const modalUserDetails = document.getElementById('modal-user-details');
+
+function updateUserInfo(index) {
+    const post = posts[index];
+    const html = `
+        <img src="${post.profileImage || 'images/default.png'}" 
+             alt="プロフィール画像" 
+             style="width:80px;height:80px;border-radius:50%;">
+        <p><strong>${post.uname}</strong></p>
+        <p>身長: ${post.height || '未設定'}</p>
+        <p>体型: ${post.frame || '未設定'}</p>
+    `;
+    userDetails.innerHTML = html;
+    modalUserDetails.innerHTML = html; // モーダルにも反映
+}
+
 
 // スクロールイベント
 const scrollContainer = document.querySelector('.photo-scroll');
