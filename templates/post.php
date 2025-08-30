@@ -1,19 +1,40 @@
 <?php
+session_start(); 
+
 $errors = [];
 $successMessage = '';
 $savedFiles = [];
 $comment = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+function connectDB() {
+    $host = 'localhost';
+    $dbname = 'soto';
+    $user = 'soto';
+    $password = 'IGEGk8Ok';
 
-    // コメントの取得とバリデーション（最大20文字）
+    try {
+        $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $pdo;
+    } catch (PDOException $e) {
+        throw new Exception('データベース接続エラー: ' . $e->getMessage());
+    }
+}
+
+if (!isset($_SESSION['uid'])) {
+    $errors[] = "ログインが必要です。";
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['uid'])) {
+    $uid = $_SESSION['uid']; 
+
+    // コメントの取得とバリデーション（最大40文字 - テーブル定義に合わせる）
     $comment = trim($_POST['comment'] ?? '');
-    if (mb_strlen($comment) > 20) {
-        $errors[] = "コメントは最大20文字までです。";
+    if (mb_strlen($comment) > 40) {
+        $errors[] = "コメントは最大40文字までです。";
     }
 
     // ファイルアップロードチェック（最大5枚）
-    // `required`属性があるので、何らかのファイルが選択される前提とします。
     if (!isset($_FILES['photos']) || empty($_FILES['photos']['name'][0])) {
         $errors[] = "画像が選択されていません。";
     } else {
@@ -77,7 +98,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (empty($errors)) {
-            $successMessage = "投稿成功！";
+            try {
+                
+                $pdo = connectDB();
+                
+                $imagePathsLiteral = "{";
+                foreach ($savedFiles as $index => $path) {
+                    if ($index > 0) {
+                        $imagePathsLiteral .= ",";
+                    }
+                    $imagePathsLiteral .= '"' . str_replace('"', '\"', $path) . '"';
+                }
+                $imagePathsLiteral .= "}";
+
+                $stmt = $pdo->prepare("INSERT INTO post_coordinate (uid, post_text, coordinateImage_path) VALUES (:uid, :post_text, :coordinateImage_path)");
+                
+                $stmt->bindParam(':uid', $uid, PDO::PARAM_INT);
+                $stmt->bindParam(':post_text', $comment, PDO::PARAM_STR);
+                $stmt->bindParam(':coordinateImage_path', $imagePathsLiteral, PDO::PARAM_STR);
+                
+                if ($stmt->execute()) {
+                    $successMessage = "投稿成功！";
+                } else {
+                    $errors[] = "データベースへの投稿に失敗しました。";
+                }
+            } catch (Exception $e) {
+                $errors[] = "エラー: " . $e->getMessage();
+                
+                foreach ($savedFiles as $path) {
+                    $fullPath = __DIR__ . '/' . $path;
+                    if (file_exists($fullPath)) {
+                        unlink($fullPath);
+                    }
+                }
+            }
         }
     }
 }
