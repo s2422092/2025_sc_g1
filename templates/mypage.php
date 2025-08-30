@@ -25,7 +25,7 @@
     $userId = $_SESSION['user_id'];
 
     // データベース接続
-    $dbconn = pg_connect("host=localhost dbname=yuisuga user=yuisuga password=R9ixwMq0") or die('Could not connect: ' . pg_last_error());
+    $dbconn = pg_connect("host=localhost dbname=s_yogo user=s_yogo password=9fjrtvAy") or die('Could not connect: ' . pg_last_error());
     
     // ユーザー情報
     $query_us = "SELECT uid, uname, email, profileImage, height, frame, created_at FROM userauth WHERE uid =  $userId;"; 
