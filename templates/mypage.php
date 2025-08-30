@@ -28,7 +28,7 @@
     $dbconn = pg_connect("host=localhost dbname=yuisuga user=yuisuga password=R9ixwMq0") or die('Could not connect: ' . pg_last_error());
     
     // ユーザー情報
-    $query_us = "SELECT uid, uname, email, profileImage, height FROM userauth WHERE uid =  $userId;"; 
+    $query_us = "SELECT uid, uname, email, profileImage, height, frame, created_at FROM userauth WHERE uid =  $userId;"; 
     $result_us = pg_query($query_us) or die('Query failed: ' . pg_last_error()); 
 
     if (!$dbconn) {
@@ -36,9 +36,11 @@
     }
 
     while ($line = pg_fetch_array($result_us)) {
-    $username = $line['uname']; //ユーザー名    
+    $username = $line['uname']; //ユーザー名
+    $userstart_date = $line['created_at']; //登録日
     $userprofile_image = $line['profileImage']; //ユーザーアイコン   
     $userheight =  $line['height']; //ユーザー身長
+    $userframe =  $line['frame']; //ユーザー体格
     }
 
     // フォロー一覧
@@ -75,7 +77,9 @@
     <div class="userdata">
         <p><strong><img src="<?php echo htmlspecialchars($userprofile_image); ?>" alt="NO DATA"></p><!--アイコン-->
         <p><strong><?php echo htmlspecialchars($username); ?></strong></p><!--ユーザー名-->
+        <p><strong><?php echo htmlspecialchars($userstart_date); ?></strong></p><!--登録日-->
         <p><strong>身長：<?php echo htmlspecialchars($userheight); ?></strong></p> <!--身長-->
+        <p><strong>体格：<?php echo htmlspecialchars($userframe); ?></strong></p> <!--体格-->
         </div>
     </div>
     <div class="post_history">
@@ -93,8 +97,7 @@
             <p><img src="<?php echo htmlspecialchars($followee_profileImage); ?>" alt="NO DATA"></p><!--フォロー相手のアイコン-->
             <p><?php echo htmlspecialchars($followee_name); ?></p><!--フォロー相手の名前-->
         </details>    
-    </div>
+</div>
     
-
 </body>
 </html>
