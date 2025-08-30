@@ -1,19 +1,40 @@
 <?php
+session_start(); 
+
 $errors = [];
 $successMessage = '';
 $savedFiles = [];
 $comment = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+function connectDB() {
+    $host = 'localhost';
+    $dbname = 'tamaru'; // DB名
+    $user = 'tamaru';   // DBユーザー
+    $password = 'H6lTJUMT'; // DBパスワード
 
-    // コメントの取得とバリデーション（最大20文字）
+    try {
+        $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $pdo;
+    } catch (PDOException $e) {
+        throw new Exception('データベース接続エラー: ' . $e->getMessage());
+    }
+}
+
+if (!isset($_SESSION['uid'])) {
+    $errors[] = "ログインが必要です。";
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['uid'])) {
+    $uid = $_SESSION['uid']; 
+
+    // コメントの取得とバリデーション（最大40文字 - テーブル定義に合わせる）
     $comment = trim($_POST['comment'] ?? '');
-    if (mb_strlen($comment) > 20) {
-        $errors[] = "コメントは最大20文字までです。";
+    if (mb_strlen($comment) > 40) {
+        $errors[] = "コメントは最大40文字までです。";
     }
 
     // ファイルアップロードチェック（最大5枚）
-    // `required`属性があるので、何らかのファイルが選択される前提とします。
     if (!isset($_FILES['photos']) || empty($_FILES['photos']['name'][0])) {
         $errors[] = "画像が選択されていません。";
     } else {
@@ -77,7 +98,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (empty($errors)) {
-            $successMessage = "投稿成功！";
+            try {
+                
+                $pdo = connectDB();
+                
+                $imagePathsLiteral = "{";
+                foreach ($savedFiles as $index => $path) {
+                    if ($index > 0) {
+                        $imagePathsLiteral .= ",";
+                    }
+                    $imagePathsLiteral .= '"' . str_replace('"', '\"', $path) . '"';
+                }
+                $imagePathsLiteral .= "}";
+
+                $stmt = $pdo->prepare("INSERT INTO post_coordinate (uid, post_text, coordinateImage_path) VALUES (:uid, :post_text, :coordinateImage_path)");
+                
+                $stmt->bindParam(':uid', $uid, PDO::PARAM_INT);
+                $stmt->bindParam(':post_text', $comment, PDO::PARAM_STR);
+                $stmt->bindParam(':coordinateImage_path', $imagePathsLiteral, PDO::PARAM_STR);
+                
+                if ($stmt->execute()) {
+                    $successMessage = "投稿成功！";
+                } else {
+                    $errors[] = "データベースへの投稿に失敗しました。";
+                }
+            } catch (Exception $e) {
+                $errors[] = "エラー: " . $e->getMessage();
+                
+                foreach ($savedFiles as $path) {
+                    $fullPath = __DIR__ . '/' . $path;
+                    if (file_exists($fullPath)) {
+                        unlink($fullPath);
+                    }
+                }
+            }
         }
     }
 }
@@ -89,160 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>写真投稿フォーム</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            padding-top: 70px; /* 固定ボタンの高さ + マージン */
-            text-align: center;
-        }
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            background: #fff;
-            padding: 30px;
-            border-radius 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 30px;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            align-items: center;
-        }
-        label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            align-self: flex-start;
-        }
-        input[type="file"],
-        input[type="text"] {
-            width: 100%;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        input[type="file"] {
-            padding: 5px;
-        }
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #fff;
-            background: linear-gradient(45deg, #6b73ff, #000dff);
-            border: none;
-            border-radius: 30px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            min-width: 120px;
-
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-        .button:hover {
-            background: linear-gradient(45deg, #000dff, #6b73ff);
-            transform: scale(1.05);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-        .error-message {
-            color: red;
-            background-color: #ffecec;
-            border: 1px solid #f5c6cb;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            text-align: left;
-        }
-        .success-message {
-            color: green;
-            background-color: #e6ffe6;
-            border: 1px solid #c6f5c6;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            font-weight: bold;
-            text-align: left;
-        }
-        /* アップロード後の表示画像用 */
-        img {
-            max-width: 200px;
-            height: auto;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin: 5px;
-        }
-        ul.uploaded-photos {
-            list-style: none;
-            padding: 0;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        ul.uploaded-photos li {
-            margin: 0;
-        }
-        .form-actions {
-          display: flex;
-          gap: 10px;
-          margin-top: 20px;
-          width: 100%;
-          justify-content: center;
-        }
-
-        /* プレビュー表示用のスタイルここから */
-        .preview-container {
-            margin-top: 20px;
-            padding: 15px;
-            border: 1px dashed #ccc;
-            border-radius: 8px;
-            background-color: #fcfcfc;
-            text-align: left;
-        }
-        .preview-container p {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #555;
-            text-align: center;
-        }
-        .photo-previews {
-            display flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-        }
-        .preview-image-wrapper {
-            width: 350px; /* プレビュー画像の固定幅 */
-            height: 350px; /* プレビュー画像の固定高さ */
-            overflow: hidden; /* はみ出した部分を隠す */
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            display: flex; /* 画像を中央揃えにするため */
-            justify-content center;
-            align-items: center;
-            background-color: #eee;
-        }
-        .preview-image {
-            max-width: 100%;
-            max-height: 100%;
-            display: block; /* 余分なスペースを削除 */
-            object-fit: contain; /* 画像全体を収める */
-        }
-        /* プレビュー表示用のスタイルここまで */
-    </style>
+    <link rel="stylesheet" href="../layout/css/post.css">
 </head>
 <body>
 
@@ -291,7 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <label for="comment">コメント（最大20文字）</label>
-        <input type="text" name="comment" id="comment" maxlength="20" required value="<?php echo htmlspecialchars($comment); ?>">
+        <input type="text" name="comment" id="comment" maxlength="20" 　placeholder="例：今日のお出かけコーデ"　required value="<?php echo htmlspecialchars($comment); ?>">
 
         <div class="form-actions">
             <!-- 投稿するボタンはフォーム内に残す -->

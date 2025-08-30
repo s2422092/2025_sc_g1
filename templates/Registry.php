@@ -68,11 +68,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../layout/css/test.css">
     <title>新規登録</title>
 </head>
-<body>
+<body class="login_body">
 
-<div>
+<div class="container">
     <h1>新規登録</h1>
     <p>新しいアカウントを作成します。</p>
 
@@ -82,13 +83,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
 
     <form action="" method="post">
         <input type="text" name="uname" placeholder="ユーザー名" required><br><br>
-        <input type="email" name="email" placeholder="メールアドレス" required><br><br>
+        <input type="email" name="email" autocomplete="email" placeholder="メールアドレス" required><br><br>
         <input type="password" name="pw" placeholder="パスワード" required><br><br>
         <input type="password" name="confirm_pw" placeholder="パスワードを再入力" required><br><br>
-        <button type="submit" name="register">登録</button>
+        <button type="submit" name="register" class="login_button">登録</button>
     </form>
     <br>
     <a href="login.php">すでにアカウントをお持ちですか？ログインはこちら</a>
+    <a href="before_login.php">戻る</a>
 </div>
 
 </body>

@@ -1,0 +1,80 @@
+/* 全体リセット */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 背景とフォント */
+body {
+  font-family: "Hiragino Sans", "Meiryo", sans-serif;
+  background: #f9fafb;
+  color: #333;
+  line-height: 1.8;
+}
+
+/* ヘッダー */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background: #4a90e2;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.main-header h1 {
+  font-size: 1.5rem;
+}
+
+.main-header a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  transition: opacity 0.3s;
+}
+
+.main-header a:hover {
+  opacity: 0.7;
+}
+
+/* メインコンテンツ */
+.main-content {
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 24px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.main-content h1 {
+  font-size: 2rem;
+  margin-bottom: 16px;
+  text-align: center;
+  color: #4a90e2;
+}
+
+.main-content p {
+  margin-bottom: 16px;
+  font-size: 1rem;
+}
+
+/* レスポンシブ */
+@media (max-width: 600px) {
+  .main-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .main-header a {
+    margin: 8px 0 0;
+  }
+
+  .main-content {
+    margin: 20px;
+    padding: 16px;
+  }
+}
