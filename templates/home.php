@@ -63,7 +63,7 @@ try {
     // 画像パスを配列に変換
     foreach ($posts as &$post) {
         // PostgreSQL の配列は "{a,b,c}" 形式で返ってくるので処理
-        $paths = trim($post['coordinateImage_path'], '{}');
+        $paths = trim($post['coordinateimage_path'], '{}');
         $post['coordinateImage_array'] = $paths ? explode(',', $paths) : [];
     }
 
@@ -111,25 +111,21 @@ try {
     <div class="main-content">
         <!-- 写真表示セクション -->
         <div class="arrow-left"></div>
-
         <div class="photo-section">
-            <?php if (!empty($posts)): ?>
-                <div id="photo-container">
-                    <h2><?= htmlspecialchars($posts[0]['uname']) ?>さんの投稿</h2>
-                    <?php if (!empty($posts[0]['coordinateImage_array'])): ?>
-                        <?php foreach ($posts[0]['coordinateImage_array'] as $index => $img): ?>
-                            <img src="<?= htmlspecialchars(trim($img), ENT_QUOTES) ?>" 
-                                alt="投稿画像" 
-                                class="post-image" 
-                                style="width:300px; height:auto; display: <?= $index === 0 ? 'block' : 'none'; ?>;">
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <p>画像がありません</p>
-                    <?php endif; ?>
+            <!-- 写真表示セクション -->
+            <div class="photo-section">
+                <div>
+                    <h2>テスト画像の表示</h2>
+                    <img id="main-image" 
+                        src="<?= !empty($posts[0]['coordinateImage_array'][0]) 
+                                    ? htmlspecialchars($posts[0]['coordinateImage_array'][0], ENT_QUOTES) 
+                                    : 'uploads/default.png' ?>" 
+                        alt="投稿画像" 
+                        class="post-image"
+                        style="width:300px; height:auto;">
                 </div>
-            <?php else: ?>
-                <h1>投稿がありません</h1>
-            <?php endif; ?>
+            </div>
+
         </div>
 
 
@@ -326,9 +322,12 @@ document.querySelectorAll('.compliment-title').forEach(item => {
 const posts = <?php echo json_encode($posts); ?>;
 const scrollContainer = document.querySelector('.photo-scroll');
 const followBtn = document.getElementById('followBtn');
+const mainImage = document.getElementById('main-image'); // メイン画像タグ取得
 
 function updateUserInfo(index) {
     const post = posts[index];
+
+    // 🔽 プロフィール情報切り替え
     const html = `
         <img src="${post.profileImage || 'uploads/default.png'}" alt="プロフィール画像" style="width:80px;height:80px;border-radius:50%;">
         <p><strong>${post.uname}</strong></p>
@@ -337,10 +336,17 @@ function updateUserInfo(index) {
     `;
     document.getElementById('user-details').innerHTML = html;
 
+    // 🔽 メイン画像切り替え
+    if (post.coordinateImage_array && post.coordinateImage_array.length > 0) {
+        mainImage.src = post.coordinateImage_array[0].trim(); // 最初の画像を表示
+    } else {
+        mainImage.src = 'uploads/default.png'; // デフォルト
+    }
+
     // 🔽 フォローボタンの表示を切り替え
     if (post.is_following) {
         followBtn.innerText = 'フォロー済み';
-        followBtn.disabled = true; // 連打防止
+        followBtn.disabled = true;
     } else {
         followBtn.innerText = 'フォロー';
         followBtn.disabled = false;
@@ -349,12 +355,14 @@ function updateUserInfo(index) {
 
 updateUserInfo(0); // 最初の投稿表示
 
+// スクロールでインデックス計算して情報更新
 scrollContainer.addEventListener('scroll', () => {
-    let index = Math.round(scrollContainer.scrollLeft / (300 + 20));
+    let index = Math.round(scrollContainer.scrollLeft / (300 + 20)); // 300px幅＋余白
     if (index < 0) index = 0;
     if (index >= posts.length) index = posts.length - 1;
     updateUserInfo(index);
 });
+
 
 // 🔽 フォローボタンクリック時
 followBtn.addEventListener('click', () => {
@@ -379,61 +387,6 @@ followBtn.addEventListener('click', () => {
 
 </script>
 
-
-<script>
-const postsData = <?php echo json_encode($posts); ?>;
-let currentPostIndex = 0; // 今の投稿
-let currentImageIndex = 0; // 今の投稿内の画像
-
-const photoContainer = document.getElementById('photo-container');
-const arrowLeft = document.querySelector('.arrow-left');
-const arrowRight = document.querySelector('.arrow-right');
-
-// 表示を更新
-function updatePhoto() {
-    const post = postsData[currentPostIndex];
-    const images = post.coordinateImage_array;
-    let html = `<h2>${post.uname}さんの投稿</h2>`;
-
-    if (images.length > 0) {
-        images.forEach((img, index) => {
-            html += `<img src="${img.trim()}" 
-                          class="post-image" 
-                          style="width:300px;height:auto;display:${index === currentImageIndex ? 'block' : 'none'};">`;
-        });
-    } else {
-        html += `<p>画像がありません</p>`;
-    }
-
-    photoContainer.innerHTML = html;
-}
-
-// 右矢印 → 次の画像 or 次の投稿
-arrowRight.addEventListener('click', () => {
-    const post = postsData[currentPostIndex];
-    if (currentImageIndex < post.coordinateImage_array.length - 1) {
-        currentImageIndex++;
-    } else {
-        currentPostIndex = (currentPostIndex + 1) % postsData.length;
-        currentImageIndex = 0;
-    }
-    updatePhoto();
-});
-
-// 左矢印 → 前の画像 or 前の投稿
-arrowLeft.addEventListener('click', () => {
-    if (currentImageIndex > 0) {
-        currentImageIndex--;
-    } else {
-        currentPostIndex = (currentPostIndex - 1 + postsData.length) % postsData.length;
-        const prevPost = postsData[currentPostIndex];
-        currentImageIndex = prevPost.coordinateImage_array.length - 1;
-    }
-    updatePhoto();
-});
-
-updatePhoto(); // 初期表示
-</script>
 
 
 <?php
