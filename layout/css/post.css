@@ -1,23 +1,22 @@
-
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f9f9f9;
-    color: #333;
+    background-color: #fff8f0;
+    color: #663300;
     margin: 0;
     padding: 20px;
-    padding-top: 70px; /* 固定ボタンの高さ + マージン */
+    padding-top: 70px;
     text-align: center;
 }
 .container {
     max-width: 600px;
     margin: 20px auto;
-    background: #fff;
+    background: #ffffff;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 h1 {
-    color: #333;
+    color: #663300;
     margin-bottom: 30px;
 }
 form {
@@ -25,8 +24,8 @@ form {
     flex-direction: column;
     gap: 20px;
     align-items: center;
-}
-label {
+}  label 
+{
     font-weight: bold;
     margin-bottom: 5px;
     align-self: flex-start;
@@ -47,44 +46,42 @@ input[type="file"] {
     padding: 10px 20px;
     font-size: 16px;
     color: #fff;
-    background: linear-gradient(45deg, #6b73ff, #000dff);
+    background: linear-gradient(45deg, #ff9900, #ff6600);
     border: none;
     border-radius: 30px;
     text-decoration: none;
     transition: all 0.3s ease;
     cursor: pointer;
     min-width: 120px;
-
     position: fixed;
     top: 20px;
     right: 20px;
     z-index: 1000;
 }
 .button:hover {
-    background: linear-gradient(45deg, #000dff, #6b73ff);
+    background: linear-gradient(45deg, #ff6600, #ff9900);
     transform: scale(1.05);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 .error-message {
-    color: red;
-    background-color: #ffecec;
-    border: 1px solid #f5c6cb;
+    color: #cc3300;
+    background-color: #fff0e6;
+    border: 1px solid #ff9999;
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 15px;
     text-align: left;
 }
 .success-message {
-    color: green;
-    background-color: #e6ffe6;
-    border: 1px solid #c6f5c6;
+    color: #996600;
+    background-color: #fffbe6;
+    border: 1px solid #ffcc66;
     padding: 15px;
     border-radius: 5px;
     margin-bottom: 20px;
     font-weight: bold;
     text-align: left;
 }
-/* アップロード後の表示画像用 */
 img {
     max-width: 200px;
     height: auto;
@@ -111,20 +108,18 @@ ul.uploaded-photos li {
     width: 100%;
     justify-content: center;
 }
-
-/* プレビュー表示用のスタイルここから */
 .preview-container {
     margin-top: 20px;
     padding: 15px;
-    border: 1px dashed #ccc;
+    border: 1px dashed #ffcc99;
     border-radius: 8px;
-    background-color: #fcfcfc;
+    background-color: #fff3e0;
     text-align: left;
 }
 .preview-container p {
     font-weight: bold;
     margin-bottom: 10px;
-    color: #555;
+    color: #663300;
     text-align: center;
 }
 .photo-previews {
@@ -134,12 +129,12 @@ ul.uploaded-photos li {
     justify-content: center;
 }
 .preview-image-wrapper {
-    width: 350px; /* プレビュー画像の固定幅 */
-    height: 350px; /* プレビュー画像の固定高さ */
-    overflow: hidden; /* はみ出した部分を隠す */
+    width: 350px;
+    height: 350px;
+    overflow: hidden;
     border: 1px solid #ddd;
     border-radius: 5px;
-    display: flex; /* 画像を中央揃えにするため */
+    display: flex;
     justify-content: center;
     align-items: center;
     background-color: #eee;
@@ -147,7 +142,6 @@ ul.uploaded-photos li {
 .preview-image {
     max-width: 100%;
     max-height: 100%;
-    display: block; /* 余分なスペースを削除 */
-    object-fit: contain; /* 画像全体を収める */
+    display: block;
+    object-fit: contain;
 }
-/* プレビュー表示用のスタイルここまで */
