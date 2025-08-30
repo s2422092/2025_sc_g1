@@ -105,19 +105,16 @@ try {
             </div>
         </div>
 
-        <div class="photo-scroll-wrapper">
+        <div class="photo-scroll">
             <div class="arrow-left"></div>
-            <div class="photo-scroll">
-                <?php foreach ($posts as $index => $post): ?>
-                    <div class="photo-slide" data-index="<?= $index ?>">
-                        <h3><?= htmlspecialchars($post['uname']) ?>さんの投稿</h3>
-                        <p><?= htmlspecialchars($post['post_text']) ?></p>
-                    </div>
-                <?php endforeach; ?>
-            </div>
+            <?php foreach ($posts as $index => $post): ?>
+                <div class="photo-slide" data-index="<?= $index ?>">
+                    <h3><?= htmlspecialchars($post['uname']) ?>さんの投稿</h3>
+                    <p><?= htmlspecialchars($post['post_text']) ?></p>
+                </div>
+            <?php endforeach; ?>
             <div class="arrow-right"></div>
         </div>
-
             
 
         <div class="follow-box">
