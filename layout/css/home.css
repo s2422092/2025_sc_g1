@@ -505,6 +505,23 @@ body {
 
 
 
+  .photo-scroll {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 20px;
+  padding: 10px;
+}
+
+.photo-slide {
+  flex: 0 0 300px;
+  scroll-snap-align: start;
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+}
+
 
     @keyframes fadeIn {
       from {opacity: 0;}
