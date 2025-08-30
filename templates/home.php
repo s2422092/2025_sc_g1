@@ -14,6 +14,10 @@ $dbname = 's_yugo';
 $user = 's_yugo';
 $password = '9fjrtvAy';
 
+$uploadDir = 'uploads/';
+$savedFiles[] = $uploadDir . basename($filename); // "uploads/ファイル名"
+
+
 try {
     $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -107,17 +111,24 @@ try {
         <!-- 写真表示セクション -->
         <div class="arrow-left"></div>
         <div class="photo-section">
-            <?php if (!empty($posts)): ?>
-                <div>
-                    <h2><?= htmlspecialchars($posts[0]['uname']) ?>さんの投稿</h2>
-                    <?php foreach ($posts[0]['coordinateImage_array'] as $img): ?>
-                        <img src="<?= htmlspecialchars($img) ?>" alt="投稿画像" class="post-image">
-                    <?php endforeach; ?>
-                </div>
-            <?php else: ?>
-                <h1>写真はまだありません</h1>
-            <?php endif; ?>
+            <div>
+                <h2>テスト画像の表示</h2>
+                <?php
+                // 表示したい画像のパスを指定
+                $testImagePath = 'uploads/img_68b2a5001b3663.24133752.jpeg'; // ここを好きなファイル名に変更
+
+                // ファイルが存在するかチェック
+                if (file_exists(__DIR__ . '/' . $testImagePath)): ?>
+                    <img src="<?= htmlspecialchars($testImagePath, ENT_QUOTES) ?>" 
+                        alt="テスト画像" 
+                        class="post-image"
+                        style="width:300px; height:auto;">
+                <?php else: ?>
+                    <p>ファイルが見つかりません: <?= htmlspecialchars($testImagePath, ENT_QUOTES) ?></p>
+                <?php endif; ?>
+            </div>
         </div>
+
 
         <div class="arrow-right"></div>
 
@@ -317,7 +328,7 @@ const followBtn = document.getElementById('followBtn');
 function updateUserInfo(index) {
     const post = posts[index];
     const html = `
-        <img src="${post.profileImage || 'images/default.png'}" alt="プロフィール画像" style="width:80px;height:80px;border-radius:50%;">
+        <img src="${post.profileImage || 'uploads/default.png'}" alt="プロフィール画像" style="width:80px;height:80px;border-radius:50%;">
         <p><strong>${post.uname}</strong></p>
         <p>身長: ${post.height || '未設定'}</p>
         <p>体型: ${post.frame || '未設定'}</p>
