@@ -8,9 +8,9 @@ $comment = '';
 
 function connectDB() {
     $host = 'localhost';
-    $dbname = 'soto';
-    $user = 'soto';
-    $password = 'IGEGk8Ok';
+    $dbname = 'tamaru'; // DB名
+    $user = 'tamaru';   // DBユーザー
+    $password = 'H6lTJUMT'; // DBパスワード
 
     try {
         $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
