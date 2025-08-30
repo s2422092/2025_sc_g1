@@ -1,5 +1,11 @@
 <?php
-session_start(); 
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+
 
 $errors = [];
 $successMessage = '';
@@ -7,13 +13,14 @@ $savedFiles = [];
 $comment = '';
 
 // デバッグ出力（問題解決後にコメントアウトまたは削除してください）
-// echo "セッション情報: <pre>" . print_r($_SESSION, true) . "</pre>";
+echo "セッション情報: <pre>" . print_r($_SESSION, true) . "</pre>";
 
 function connectDB() {
-    $host = 'localhost';
-    $dbname = 'soto'; // DB名
-    $user = 'soto';   // DBユーザー
-    $password = 'IGEGk8Ok'; // DBパスワード
+$host = 'localhost';
+$dbname = 's_yugo'; // DB名
+$user = 's_yugo';   // DBユーザー
+$password = '9fjrtvAy'; // DBパスワード
+
 
     try {
         $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
@@ -25,14 +32,14 @@ function connectDB() {
 }
 
 // ここでセッションを確認 - デバッグ目的でテスト用のuidを設定（最終版では削除すること）
-if (!isset($_SESSION['uid'])) {
+if (!isset($_SESSION['user_id'])) {
     $errors[] = "ログインが必要です。";
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // セッションにuidがある場合のみ処理を続行
-    if (isset($_SESSION['uid'])) {
-        $uid = $_SESSION['uid']; 
+    if (isset($_SESSION['user_id'])) {
+        $uid = $_SESSION['user_id']; 
 
         // コメントの取得とバリデーション（最大40文字 - テーブル定義に合わせる）
         $comment = trim($_POST['comment'] ?? '');
