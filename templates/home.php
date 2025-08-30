@@ -80,10 +80,6 @@ try {
     <meta charset="UTF-8">
     <title>ホーム</title>
     <link rel="stylesheet" href="../layout/css/home.css">
-
-
-
-
 </head>
 
 <body>
