@@ -9,9 +9,9 @@ if (!isset($_SESSION['user_id'])) {
 
 // DB接続情報
 $host = 'localhost';
-$dbname = 'tamaru'; // DB名
-$user = 'tamaru';   // DBユーザー
-$password = 'H6lTJUMT'; // DBパスワード
+$dbname = 's_yugo'; // DB名
+$user = 's_yugo';   // DBユーザー
+$password = '9fjrtvAy'; // DBパスワード
 
 try {
     $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);

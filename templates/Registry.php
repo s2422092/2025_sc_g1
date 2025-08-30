@@ -5,9 +5,9 @@ session_start();
 
 // データベース接続情報
 $host = 'localhost';
-$dbname = 'tamaru'; // データベース名に置き換えてください
-$user = 'tamaru'; // ユーザー名に置き換えてください
-$password = 'H6lTJUMT'; // パスワードに置き換えてください
+$dbname = 's_yugo'; // DB名
+$user = 's_yugo';   // DBユーザー
+$password = '9fjrtvAy'; // DBパスワード
 
 // エラーメッセージを格納する変数
 $error = '';
