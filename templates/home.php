@@ -51,18 +51,32 @@ try {
     $stmt = $pdo->query("SELECT compliment_text FROM compliment_list ORDER BY compliment_id");
     $compliments = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-    // 投稿とユーザー情報を取得
+    
+
+    // 投稿とユーザー情報を取得（変更）
     $stmt = $pdo->query("
-        SELECT p.post_id, p.post_text, p.coordinateImage_path, u.uid, u.uname, u.profileImage, u.height, u.frame
+        SELECT p.post_id, p.post_text, p.coordinateImage_path,
+            u.uid, u.uname, u.profileImage, u.height, u.frame
         FROM post_coordinate p
         JOIN userauth u ON p.uid = u.uid
         ORDER BY p.created_at DESC
     ");
     $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // 画像パスを配列に変換
+    // 各投稿にコメントを追加
     foreach ($posts as &$post) {
-        // PostgreSQL の配列は "{a,b,c}" 形式で返ってくるので処理
+        $stmt = $pdo->prepare("
+            SELECT pc.post_compliment_id, c.compliment_text, ua.uname
+            FROM post_compliment pc
+            JOIN compliment_list c ON pc.compliment_id = c.compliment_id
+            JOIN userauth ua ON pc.uid = ua.uid
+            WHERE pc.post_id = ?
+            ORDER BY pc.created_at DESC
+        ");
+        $stmt->execute([$post['post_id']]);
+        $post['compliments'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // 画像パス配列処理（既存）
         $paths = trim($post['coordinateimage_path'], '{}');
         $post['coordinateImage_array'] = $paths ? explode(',', $paths) : [];
     }
@@ -206,7 +220,16 @@ try {
                     </div>
                 </div>
 
-                <div class="comment-list"></div> <!-- 投稿されたコメントを表示 -->
+                <div class="comment-list">
+                    <?php if (!empty($post['compliments'])): ?>
+                        <?php foreach ($post['compliments'] as $c): ?>
+                            <p><?= htmlspecialchars($c['uname']) ?>: <?= htmlspecialchars($c['compliment_text']) ?></p>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p>コメントはまだありません</p>
+                    <?php endif; ?>
+                </div>
+
             </div>
         </div>
 
@@ -276,7 +299,16 @@ try {
                         </div>
                     </div>
                 </div>
-            <div class="comment-list"></div>
+            <div class="comment-list">
+                <?php if (!empty($post['compliments'])): ?>
+                    <?php foreach ($post['compliments'] as $c): ?>
+                        <p><?= htmlspecialchars($c['uname']) ?>: <?= htmlspecialchars($c['compliment_text']) ?></p>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>コメントはまだありません</p>
+                <?php endif; ?>
+            </div>
+
         </div>
 
     </div>
@@ -416,6 +448,36 @@ followBtn.addEventListener('click', () => {
     })
     .catch(err => console.error(err));
 });
+
+document.querySelector('.comment-submit').addEventListener('click', () => {
+    const compliment = document.getElementById('complimentSelect').value;
+    if (!compliment) {
+        alert("褒め言葉を選んでください");
+        return;
+    }
+
+    const currentPost = posts[currentPostIndex];
+    const post_id = currentPost.post_id;
+
+    fetch('compliment_post.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `post_id=${encodeURIComponent(post_id)}&compliment=${encodeURIComponent(compliment)}`
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+        if (data.status === 'success') {
+            // 画面に即反映
+            const list = document.querySelector('.comment-list');
+            const newComment = document.createElement('p');
+            newComment.textContent = `${compliment} (${<?php echo json_encode($_SESSION['user_name']); ?>})`;
+            list.appendChild(newComment);
+        }
+    })
+    .catch(err => console.error(err));
+});
+
 
 </script>
 
