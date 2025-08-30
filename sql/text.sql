@@ -84,3 +84,5 @@ INSERT INTO compliment_list (compliment_text) VALUES
 ('お似合いです！'),
 ('キマってる！'),
 ('素晴らしい！');
+
+?// これでデータベースのセットアップは完了です。
