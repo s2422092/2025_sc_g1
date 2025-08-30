@@ -39,7 +39,12 @@ try {
 
     // 🔽 各投稿に「フォロー済み」フラグを追加
     foreach ($posts as &$post) {
-        $post['is_following'] = in_array((int)$post['uid'], $followed_ids);
+        echo '<script>';
+        echo 'console.log("coordinateImage_path:", ' . json_encode($post['coordinateimage_path']) . ');';
+        echo '</script>';
+
+        $paths = trim($post['coordinateimage_path'], '{}');
+        $post['coordinateImage_array'] = $paths ? explode(',', $paths) : [];
     }
 
     // 褒め言葉一覧
