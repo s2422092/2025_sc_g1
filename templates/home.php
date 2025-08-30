@@ -111,23 +111,25 @@ try {
     <div class="main-content">
         <!-- 写真表示セクション -->
         <div class="arrow-left"></div>
-        <div class="photo-section">
-            <div>
-                <h2>テスト画像の表示</h2>
-                <?php
-                // 表示したい画像のパスを指定
-                $testImagePath = 'uploads/img_68b2a5001b3663.24133752.jpeg'; // ここを好きなファイル名に変更
 
-                // ファイルが存在するかチェック
-                if (file_exists(__DIR__ . '/' . $testImagePath)): ?>
-                    <img src="<?= htmlspecialchars($testImagePath, ENT_QUOTES) ?>" 
-                        alt="テスト画像" 
-                        class="post-image"
-                        style="width:300px; height:auto;">
-                <?php else: ?>
-                    <p>ファイルが見つかりません: <?= htmlspecialchars($testImagePath, ENT_QUOTES) ?></p>
-                <?php endif; ?>
-            </div>
+        <div class="photo-section">
+            <?php if (!empty($posts)): ?>
+                <div id="photo-container">
+                    <h2><?= htmlspecialchars($posts[0]['uname']) ?>さんの投稿</h2>
+                    <?php if (!empty($posts[0]['coordinateImage_array'])): ?>
+                        <?php foreach ($posts[0]['coordinateImage_array'] as $index => $img): ?>
+                            <img src="<?= htmlspecialchars(trim($img), ENT_QUOTES) ?>" 
+                                alt="投稿画像" 
+                                class="post-image" 
+                                style="width:300px; height:auto; display: <?= $index === 0 ? 'block' : 'none'; ?>;">
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p>画像がありません</p>
+                    <?php endif; ?>
+                </div>
+            <?php else: ?>
+                <h1>投稿がありません</h1>
+            <?php endif; ?>
         </div>
 
 
@@ -152,7 +154,6 @@ try {
                 </div>
             <?php endforeach; ?>
         </div>
-
 
         <div class="follow-box">
             <button id="followBtn" class="follow-button">フォロー</button>
@@ -378,6 +379,61 @@ followBtn.addEventListener('click', () => {
 
 </script>
 
+
+<script>
+const postsData = <?php echo json_encode($posts); ?>;
+let currentPostIndex = 0; // 今の投稿
+let currentImageIndex = 0; // 今の投稿内の画像
+
+const photoContainer = document.getElementById('photo-container');
+const arrowLeft = document.querySelector('.arrow-left');
+const arrowRight = document.querySelector('.arrow-right');
+
+// 表示を更新
+function updatePhoto() {
+    const post = postsData[currentPostIndex];
+    const images = post.coordinateImage_array;
+    let html = `<h2>${post.uname}さんの投稿</h2>`;
+
+    if (images.length > 0) {
+        images.forEach((img, index) => {
+            html += `<img src="${img.trim()}" 
+                          class="post-image" 
+                          style="width:300px;height:auto;display:${index === currentImageIndex ? 'block' : 'none'};">`;
+        });
+    } else {
+        html += `<p>画像がありません</p>`;
+    }
+
+    photoContainer.innerHTML = html;
+}
+
+// 右矢印 → 次の画像 or 次の投稿
+arrowRight.addEventListener('click', () => {
+    const post = postsData[currentPostIndex];
+    if (currentImageIndex < post.coordinateImage_array.length - 1) {
+        currentImageIndex++;
+    } else {
+        currentPostIndex = (currentPostIndex + 1) % postsData.length;
+        currentImageIndex = 0;
+    }
+    updatePhoto();
+});
+
+// 左矢印 → 前の画像 or 前の投稿
+arrowLeft.addEventListener('click', () => {
+    if (currentImageIndex > 0) {
+        currentImageIndex--;
+    } else {
+        currentPostIndex = (currentPostIndex - 1 + postsData.length) % postsData.length;
+        const prevPost = postsData[currentPostIndex];
+        currentImageIndex = prevPost.coordinateImage_array.length - 1;
+    }
+    updatePhoto();
+});
+
+updatePhoto(); // 初期表示
+</script>
 
 
 <?php
