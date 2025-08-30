@@ -56,11 +56,12 @@ try {
     $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // 画像パスを配列に変換
+    // 画像パスを配列に変換
     foreach ($posts as &$post) {
-        // PostgreSQL の配列は "{a,b,c}" 形式で返ってくるので処理
         $paths = trim($post['coordinateImage_path'], '{}');
         $post['coordinateImage_array'] = $paths ? explode(',', $paths) : [];
     }
+
 
 
 } catch (PDOException $e) {
@@ -110,24 +111,16 @@ try {
     <div class="main-content">
         <!-- 写真表示セクション -->
         <div class="arrow-left"></div>
-        <div class="photo-section">
-            <div>
-                <h2>テスト画像の表示</h2>
-                <?php
-                // 表示したい画像のパスを指定
-                $testImagePath = 'uploads/img_68b2a5001b3663.24133752.jpeg'; // ここを好きなファイル名に変更
+<div class="photo-section">
+    <div>
+        <h2>投稿画像のリンク</h2>
+        <p><?= htmlspecialchars($posts[0]['coordinateImage_array'][0], ENT_QUOTES) ?></p>
+    </div>
+</div>
 
-                // ファイルが存在するかチェック
-                if (file_exists(__DIR__ . '/' . $testImagePath)): ?>
-                    <img src="<?= htmlspecialchars($testImagePath, ENT_QUOTES) ?>" 
-                        alt="テスト画像" 
-                        class="post-image"
-                        style="width:300px; height:auto;">
-                <?php else: ?>
-                    <p>ファイルが見つかりません: <?= htmlspecialchars($testImagePath, ENT_QUOTES) ?></p>
-                <?php endif; ?>
-            </div>
-        </div>
+
+
+
 
 
         <div class="arrow-right"></div>
@@ -146,11 +139,14 @@ try {
         <div class="photo-scroll">
             <?php foreach ($posts as $index => $post): ?>
                 <div class="photo-slide" data-index="<?= $index ?>">
-                    <h3><?= htmlspecialchars($post['uname']) ?>さんの投稿</h3>
+                    <h3 class="post-title" data-index="<?= $index ?>">
+                        <?= htmlspecialchars($post['uname']) ?>さんの投稿
+                    </h3>
                     <p><?= htmlspecialchars($post['post_text']) ?></p>
                 </div>
             <?php endforeach; ?>
         </div>
+
 
 
         <div class="follow-box">
@@ -239,11 +235,14 @@ try {
             <div class="photo-scroll">
                 <?php foreach ($posts as $index => $post): ?>
                     <div class="photo-slide" data-index="<?= $index ?>">
-                        <h3><?= htmlspecialchars($post['uname']) ?>さんの投稿</h3>
+                        <h3 class="post-title" data-index="<?= $index ?>">
+                            <?= htmlspecialchars($post['uname']) ?>さんの投稿
+                        </h3>
                         <p><?= htmlspecialchars($post['post_text']) ?></p>
                     </div>
                 <?php endforeach; ?>
             </div>
+
 
                 <div class="compliment-summary">
                     <div class="compliment-item">
@@ -373,6 +372,23 @@ followBtn.addEventListener('click', () => {
         }
     })
     .catch(err => console.error(err));
+});
+
+
+const postsData = <?php echo json_encode($posts); ?>;
+
+// 投稿タイトル（h3）をクリックしたら画像切り替え
+document.querySelectorAll('.post-title').forEach(title => {
+    title.addEventListener('click', () => {
+        const index = title.dataset.index;
+        const post = postsData[index];
+
+        if (post.coordinateImage_array.length > 0) {
+            document.getElementById('selectedImage').src = post.coordinateImage_array[0];
+        } else {
+            document.getElementById('selectedImage').src = 'uploads/default.png';
+        }
+    });
 });
 
 </script>
