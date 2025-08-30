@@ -1,25 +1,29 @@
 <?php
-session_start(); // セッション開始
+session_start();
 
-// ログインしていなければリダイレクト
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
 }
 
-// DB接続情報
+// DB接続
 $host = 'localhost';
-$dbname = 's_yugo'; // DB名
-$user = 's_yugo';   // DBユーザー
-$password = '9fjrtvAy'; // DBパスワード
+$dbname = 's_yugo';
+$user = 's_yugo';
+$password = '9fjrtvAy';
 
 try {
     $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // compliment_list の褒め言葉を取得
-    $stmt = $pdo->query("SELECT compliment_text FROM compliment_list ORDER BY compliment_id");
-    $compliments = $stmt->fetchAll(PDO::FETCH_COLUMN); // 配列で取得
+    // 投稿とユーザー情報をJOINで取得
+    $stmt = $pdo->query("
+        SELECT p.post_id, p.post_text, p.coordinateImage_path, u.uid, u.uname, u.profileImage, u.height, u.frame
+        FROM post_coordinate p
+        JOIN userauth u ON p.uid = u.uid
+        ORDER BY p.created_at DESC
+    ");
+    $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
     die("DB接続エラー: " . $e->getMessage());
@@ -75,9 +79,25 @@ try {
 
         <!-- ユーザー情報・フォロー・コメント欄 -->
         <div class="user-follow-section">
-            <div>
+           <div class="user-follow-section">
+            <div id="user-info">
                 <h2>ユーザー情報</h2>
+                <div id="user-details">
+                    <!-- JSで切り替える -->
+                </div>
             </div>
+        </div>
+
+        <div class="photo-scroll">
+            <?php foreach ($posts as $index => $post): ?>
+                <div class="photo-slide" data-index="<?= $index ?>">
+                    <h3><?= htmlspecialchars($post['uname']) ?>さんの投稿</h3>
+                    <p><?= htmlspecialchars($post['post_text']) ?></p>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+
             <div class="follow-box">
                 <h2>フォロー</h2>
             </div>
@@ -232,6 +252,33 @@ document.querySelectorAll('.compliment-title').forEach(item => {
           : 'none';
     });
   });
+
+const posts = <?php echo json_encode($posts); ?>;
+const userDetails = document.getElementById('user-details');
+const slides = document.querySelectorAll('.photo-slide');
+
+// 初期表示
+function updateUserInfo(index) {
+    const post = posts[index];
+    userDetails.innerHTML = `
+        <img src="${post.profileImage || 'images/default.png'}" alt="プロフィール画像" style="width:80px;height:80px;border-radius:50%;">
+        <p><strong>${post.uname}</strong></p>
+        <p>身長: ${post.height || '未設定'}</p>
+        <p>体型: ${post.frame || '未設定'}</p>
+    `;
+}
+updateUserInfo(0);
+
+// スクロールイベント
+const scrollContainer = document.querySelector('.photo-scroll');
+scrollContainer.addEventListener('scroll', () => {
+    let index = Math.round(scrollContainer.scrollLeft / (300 + 20)); // 300px幅+gap20px
+    if (index < 0) index = 0;
+    if (index >= posts.length) index = posts.length - 1;
+    updateUserInfo(index);
+});
+
+
 </script>
 
 
