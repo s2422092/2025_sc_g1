@@ -36,9 +36,9 @@
     }
 
     while ($line = pg_fetch_array($result_us)) {
-    $username = $line['uname'];    
-    $userprofile_image = $line['profileImage'];    
-    $userheight =  $line['height'];
+    $username = $line['uname']; //ユーザー名    
+    $userprofile_image = $line['profileImage']; //ユーザーアイコン   
+    $userheight =  $line['height']; //ユーザー身長
     }
 
     // フォロー一覧
@@ -50,7 +50,7 @@
     }
 
     while ($line = pg_fetch_array($result_ls)) {
-    $followee_profileImage = $line['profileImage']
+    $followee_profileImage = $line['profileImage']//アイコン
     $followee_name = $line['uname']//フォロー名
     }
 
@@ -73,26 +73,25 @@
     pg_close($dbconn);
     ?>
     <div class="userdata">
-        <div>
-        <p><strong>ユーザー名：</strong></p>
-        <p><strong>メール：</strong></p>
-        <p><strong>登録日：</strong></p>
+        <p><strong><img src="<?php echo htmlspecialchars($userprofile_image); ?>" alt="NO DATA"></p><!--アイコン-->
+        <p><strong><?php echo htmlspecialchars($username); ?></strong></p><!--ユーザー名-->
+        <p><strong>身長：<?php echo htmlspecialchars($userheight); ?></strong></p> <!--身長-->
         </div>
     </div>
     <div class="post_history">
         <details>
             <summary>投稿履歴</summary>
-            <p>name</p>
-            <p>text</p>
-            <p>image</p>
-            <p>date</p>
+            <p><img src="<?php echo htmlspecialchars($post_image); ?>" alt="NO DATA"></p><!--アイコン-->
+            <p><?php echo htmlspecialchars($uname); ?></p><!--ユーザー名-->
+            <p><?php echo htmlspecialchars($post_text); ?></p><!--投稿内容-->
+            <p><?php echo htmlspecialchars($post_date); ?></p><!--投稿日時-->
         </details>    
     </div>
     <div class="follow_list">
         <details>
             <summary>フォロー一覧</summary>
-            <p>image</p>
-            <p>name</p>
+            <p><img src="<?php echo htmlspecialchars($followee_profileImage); ?>" alt="NO DATA"></p><!--フォロー相手のアイコン-->
+            <p><?php echo htmlspecialchars($followee_name); ?></p><!--フォロー相手の名前-->
         </details>    
     </div>
     
