@@ -6,6 +6,8 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+$login_uid = $_SESSION['user_id']; // ログイン中のユーザーID
+
 // DB接続
 $host = 'localhost';
 $dbname = 's_yugo';
@@ -16,7 +18,13 @@ try {
     $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // 投稿とユーザー情報をJOINで取得
+    // 🔽 ログイン中のユーザーがフォローしているユーザーIDを取得
+    $stmt = $pdo->prepare("SELECT followee_uid FROM user_follow WHERE follower_uid = ?");
+    $stmt->execute([$login_uid]);
+    $followed_ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    $followed_ids = array_map('intval', $followed_ids);
+
+    // 投稿とユーザー情報を取得
     $stmt = $pdo->query("
         SELECT p.post_id, p.post_text, p.coordinateImage_path, u.uid, u.uname, u.profileImage, u.height, u.frame
         FROM post_coordinate p
@@ -25,9 +33,14 @@ try {
     ");
     $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // compliment_list の褒め言葉を取得
+    // 🔽 各投稿に「フォロー済み」フラグを追加
+    foreach ($posts as &$post) {
+        $post['is_following'] = in_array((int)$post['uid'], $followed_ids);
+    }
+
+    // 褒め言葉一覧
     $stmt = $pdo->query("SELECT compliment_text FROM compliment_list ORDER BY compliment_id");
-    $compliments = $stmt->fetchAll(PDO::FETCH_COLUMN); // 配列で取得
+    $compliments = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
 } catch (PDOException $e) {
     die("DB接続エラー: " . $e->getMessage());
@@ -271,50 +284,41 @@ document.querySelectorAll('.compliment-title').forEach(item => {
   });
 
 const posts = <?php echo json_encode($posts); ?>;
-const userDetails = document.getElementById('user-details');
-const slides = document.querySelectorAll('.photo-slide');
+const scrollContainer = document.querySelector('.photo-scroll');
+const followBtn = document.getElementById('followBtn');
 
-// 初期表示
 function updateUserInfo(index) {
     const post = posts[index];
-    userDetails.innerHTML = `
+    const html = `
         <img src="${post.profileImage || 'images/default.png'}" alt="プロフィール画像" style="width:80px;height:80px;border-radius:50%;">
         <p><strong>${post.uname}</strong></p>
         <p>身長: ${post.height || '未設定'}</p>
         <p>体型: ${post.frame || '未設定'}</p>
     `;
+    document.getElementById('user-details').innerHTML = html;
+
+    // 🔽 フォローボタンの表示を切り替え
+    if (post.is_following) {
+        followBtn.innerText = 'フォロー済み';
+        followBtn.disabled = true; // 連打防止
+    } else {
+        followBtn.innerText = 'フォロー';
+        followBtn.disabled = false;
+    }
 }
 
+updateUserInfo(0); // 最初の投稿表示
 
-const modalUserDetails = document.getElementById('modal-user-details');
-
-function updateUserInfo(index) {
-    const post = posts[index];
-    const html = `
-        <img src="${post.profileImage || 'images/default.png'}" 
-             alt="プロフィール画像" 
-             style="width:80px;height:80px;border-radius:50%;">
-        <p><strong>${post.uname}</strong></p>
-        <p>身長: ${post.height || '未設定'}</p>
-        <p>体型: ${post.frame || '未設定'}</p>
-    `;
-    userDetails.innerHTML = html;
-    modalUserDetails.innerHTML = html; // モーダルにも反映
-}
-
-updateUserInfo(0); // 最初の投稿のユーザー情報を表示
-
-// スクロールイベント
-const scrollContainer = document.querySelector('.photo-scroll');
 scrollContainer.addEventListener('scroll', () => {
-    let index = Math.round(scrollContainer.scrollLeft / (300 + 20)); // 300px幅+gap20px
+    let index = Math.round(scrollContainer.scrollLeft / (300 + 20));
     if (index < 0) index = 0;
     if (index >= posts.length) index = posts.length - 1;
     updateUserInfo(index);
 });
 
-document.getElementById('followBtn').addEventListener('click', () => {
-    const index = Math.round(scrollContainer.scrollLeft / (300 + 20));
+// 🔽 フォローボタンクリック時
+followBtn.addEventListener('click', () => {
+    let index = Math.round(scrollContainer.scrollLeft / (300 + 20));
     const targetUserId = posts[index].uid;
 
     fetch('follow.php', {
@@ -326,12 +330,12 @@ document.getElementById('followBtn').addEventListener('click', () => {
     .then(data => {
         alert(data.message);
         if (data.status === 'success') {
-            document.getElementById('followBtn').innerText = 'フォロー済み';
+            posts[index].is_following = true; // データ更新
+            updateUserInfo(index); // ボタン表示を更新
         }
     })
     .catch(err => console.error(err));
 });
-
 
 </script>
 
