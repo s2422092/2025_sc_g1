@@ -414,6 +414,19 @@ function updateUserInfo(index) {
         followBtn.innerText = 'フォロー';
         followBtn.disabled = false;
     }
+
+    const commentList = document.querySelector('.comment-list');
+    commentList.innerHTML = ""; // 一旦クリア
+    if (post.compliments && post.compliments.length > 0) {
+        post.compliments.forEach(c => {
+            const p = document.createElement('p');
+            p.textContent = `${c.uname}: ${c.compliment_text}`;
+            commentList.appendChild(p);
+        });
+    } else {
+        commentList.innerHTML = "<p>コメントはまだありません</p>";
+    }
+    
 }
 
 
