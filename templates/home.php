@@ -111,21 +111,13 @@ try {
         <!-- 写真表示セクション -->
         <div class="arrow-left"></div>
         <div class="photo-section">
-            <div>
-                <h2>テスト画像の表示</h2>
-                <?php
-                // 表示したい画像のパスを指定
-                $testImagePath = 'uploads/img_68b2a5001b3663.24133752.jpeg'; // ここを好きなファイル名に変更
-
-                // ファイルが存在するかチェック
-                if (file_exists(__DIR__ . '/' . $testImagePath)): ?>
-                    <img src="<?= htmlspecialchars($testImagePath, ENT_QUOTES) ?>" 
-                        alt="テスト画像" 
-                        class="post-image"
-                        style="width:300px; height:auto;">
-                <?php else: ?>
-                    <p>ファイルが見つかりません: <?= htmlspecialchars($testImagePath, ENT_QUOTES) ?></p>
-                <?php endif; ?>
+        <div>
+                <h2>投稿画像の表示</h2>
+                <img id="selectedImage" 
+                    src="<?= !empty($posts[0]['coordinateImage_array'][0]) ? htmlspecialchars($posts[0]['coordinateImage_array'][0], ENT_QUOTES) : 'uploads/default.png' ?>" 
+                    alt="投稿画像" 
+                    class="post-image"
+                    style="width:300px; height:auto;">
             </div>
         </div>
 
@@ -300,17 +292,24 @@ try {
 <script>
 const modal = document.getElementById('commentModal');
 const userFollowSection = document.querySelector('.user-follow-section');
+const posts = <?php echo json_encode($posts); ?>;
+const scrollContainer = document.querySelector('.photo-scroll');
+const followBtn = document.getElementById('followBtn');
+const selectedImage = document.getElementById('selectedImage'); // 投稿画像
+let currentPostIndex = 0; // 現在の投稿インデックス
+let currentImageIndex = 0; // 現在の画像インデックス
 
+// ======== モーダル関連 ========
 // ユーザー情報領域をダブルクリックで開く
 userFollowSection.addEventListener('dblclick', () => {
   modal.classList.add('active'); // 出現
 });
-
 // モーダルをダブルクリックで閉じる
 modal.addEventListener('dblclick', () => {
   modal.classList.remove('active'); // 閉じる
 });
 
+// ======== お褒めコメント欄の開閉 ========
 document.querySelectorAll('.compliment-title').forEach(item => {
     item.addEventListener('click', () => {
       const usersDiv = item.nextElementSibling;
@@ -319,45 +318,100 @@ document.querySelectorAll('.compliment-title').forEach(item => {
           ? 'block'
           : 'none';
     });
-  });
+});
 
-const posts = <?php echo json_encode($posts); ?>;
-const scrollContainer = document.querySelector('.photo-scroll');
-const followBtn = document.getElementById('followBtn');
-
+// ======== ユーザー情報＆画像更新 ========
 function updateUserInfo(index) {
+    currentPostIndex = index;
     const post = posts[index];
+
+    // ユーザー情報
     const html = `
         <img src="${post.profileImage || 'uploads/default.png'}" alt="プロフィール画像" style="width:80px;height:80px;border-radius:50%;">
         <p><strong>${post.uname}</strong></p>
+        <p>投稿ID: ${post.post_id || '不明'}</p>
         <p>身長: ${post.height || '未設定'}</p>
         <p>体型: ${post.frame || '未設定'}</p>
     `;
     document.getElementById('user-details').innerHTML = html;
 
-    // 🔽 フォローボタンの表示を切り替え
+    // 画像切り替え
+    currentImageIndex = 0;
+    updateImage();
+
+    // フォローボタン
     if (post.is_following) {
         followBtn.innerText = 'フォロー済み';
-        followBtn.disabled = true; // 連打防止
+        followBtn.disabled = true;
     } else {
         followBtn.innerText = 'フォロー';
         followBtn.disabled = false;
     }
+
+    // インジケータ更新
+    updateIndicator();
 }
 
-updateUserInfo(0); // 最初の投稿表示
+// ======== 画像の切り替え ========
+function updateImage() {
+    const post = posts[currentPostIndex];
+    const images = post.coordinateImage_array || [];
 
+    if (images.length > 0 && images[currentImageIndex]) {
+        selectedImage.src = images[currentImageIndex];
+    } else {
+        selectedImage.src = 'uploads/default.png';
+    }
+}
+
+// ======== インジケータ（ドット）更新 ========
+function updateIndicator() {
+    const indicatorContainer = document.getElementById('image-indicator');
+    if (!indicatorContainer) return;
+
+    const post = posts[currentPostIndex];
+    const images = post.coordinateImage_array || [];
+    indicatorContainer.innerHTML = '';
+
+    images.forEach((_, i) => {
+        const dot = document.createElement('span');
+        dot.classList.add('dot');
+        if (i === currentImageIndex) dot.classList.add('active-dot');
+        dot.addEventListener('click', () => {
+            currentImageIndex = i;
+            updateImage();
+            updateIndicator();
+        });
+        indicatorContainer.appendChild(dot);
+    });
+}
+
+// ======== 自動スライドショー（投稿切り替え） ========
+setInterval(() => {
+    let newIndex = currentPostIndex + 1;
+    if (newIndex >= posts.length) newIndex = 0;
+    scrollToIndex(newIndex);
+    updateUserInfo(newIndex);
+}, 8000); // 8秒ごと
+
+function scrollToIndex(index) {
+    scrollContainer.scrollTo({
+        left: index * 320, // 幅300+マージン20
+        behavior: 'smooth'
+    });
+}
+
+// ======== スクロール時の表示更新 ========
 scrollContainer.addEventListener('scroll', () => {
-    let index = Math.round(scrollContainer.scrollLeft / (300 + 20));
+    let index = Math.round(scrollContainer.scrollLeft / 320);
     if (index < 0) index = 0;
     if (index >= posts.length) index = posts.length - 1;
     updateUserInfo(index);
 });
 
-// 🔽 フォローボタンクリック時
+// ======== フォローボタンクリック ========
 followBtn.addEventListener('click', () => {
-    let index = Math.round(scrollContainer.scrollLeft / (300 + 20));
-    const targetUserId = posts[index].uid;
+    const targetUserId = posts[currentPostIndex].uid;
 
     fetch('follow.php', {
         method: 'POST',
@@ -368,14 +422,32 @@ followBtn.addEventListener('click', () => {
     .then(data => {
         alert(data.message);
         if (data.status === 'success') {
-            posts[index].is_following = true; // データ更新
-            updateUserInfo(index); // ボタン表示を更新
+            posts[currentPostIndex].is_following = true;
+            updateUserInfo(currentPostIndex);
         }
     })
     .catch(err => console.error(err));
 });
 
+// ======== 画像クリックで拡大モーダル表示 ========
+selectedImage.addEventListener('click', () => {
+    const fullImgModal = document.createElement('div');
+    fullImgModal.classList.add('full-img-modal');
+    fullImgModal.innerHTML = `
+        <div class="full-img-wrapper">
+            <img src="${selectedImage.src}" alt="拡大画像">
+        </div>
+    `;
+    document.body.appendChild(fullImgModal);
+    fullImgModal.addEventListener('click', () => {
+        document.body.removeChild(fullImgModal);
+    });
+});
+
+// 初期表示
+updateUserInfo(0);
 </script>
+
 
 
 
