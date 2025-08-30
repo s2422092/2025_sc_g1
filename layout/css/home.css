@@ -166,6 +166,7 @@ body {
 /* ====== メインコンテンツ ====== */
 .main-content {
   display: flex;
+  color: #663300;
   justify-content: flex-end;
   align-items: flex-start;
   gap: 50px;
@@ -176,6 +177,7 @@ body {
 
 .photo-section {
   display: flex;
+  color: #663300;
   align-items: center;
   justify-content: center;
   gap: 20px;
