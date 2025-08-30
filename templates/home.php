@@ -102,9 +102,10 @@ try {
         </div>
 
 
-            <div class="follow-box">
-                <h2>フォロー</h2>
-            </div>
+        <div class="follow-box">
+            <button id="followBtn" class="follow-button">フォロー</button>
+        </div>
+
             <div class="comment-box">
                 <div class="comment-header">
                     <h2>コメント欄</h2>
@@ -310,6 +311,25 @@ scrollContainer.addEventListener('scroll', () => {
     if (index < 0) index = 0;
     if (index >= posts.length) index = posts.length - 1;
     updateUserInfo(index);
+});
+
+document.getElementById('followBtn').addEventListener('click', () => {
+    const index = Math.round(scrollContainer.scrollLeft / (300 + 20));
+    const targetUserId = posts[index].uid;
+
+    fetch('follow.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `target_id=${encodeURIComponent(targetUserId)}`
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+        if (data.status === 'success') {
+            document.getElementById('followBtn').innerText = 'フォロー済み';
+        }
+    })
+    .catch(err => console.error(err));
 });
 
 
