@@ -42,6 +42,23 @@ try {
     $stmt = $pdo->query("SELECT compliment_text FROM compliment_list ORDER BY compliment_id");
     $compliments = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
+    // 投稿とユーザー情報を取得
+    $stmt = $pdo->query("
+        SELECT p.post_id, p.post_text, p.coordinateImage_path, u.uid, u.uname, u.profileImage, u.height, u.frame
+        FROM post_coordinate p
+        JOIN userauth u ON p.uid = u.uid
+        ORDER BY p.created_at DESC
+    ");
+    $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // 画像パスを配列に変換
+    foreach ($posts as &$post) {
+        // PostgreSQL の配列は "{a,b,c}" 形式で返ってくるので処理
+        $paths = trim($post['coordinateImage_path'], '{}');
+        $post['coordinateImage_array'] = $paths ? explode(',', $paths) : [];
+    }
+
+
 } catch (PDOException $e) {
     die("DB接続エラー: " . $e->getMessage());
 }
@@ -90,8 +107,18 @@ try {
         <!-- 写真表示セクション -->
         <div class="arrow-left"></div>
         <div class="photo-section">
-            <h1>写真の表示</h1>
+            <?php if (!empty($posts)): ?>
+                <div>
+                    <h2><?= htmlspecialchars($posts[0]['uname']) ?>さんの投稿</h2>
+                    <?php foreach ($posts[0]['coordinateImage_array'] as $img): ?>
+                        <img src="<?= htmlspecialchars($img) ?>" alt="投稿画像" class="post-image">
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <h1>写真はまだありません</h1>
+            <?php endif; ?>
         </div>
+
         <div class="arrow-right"></div>
 
         <!-- ユーザー情報・フォロー・コメント欄 -->
