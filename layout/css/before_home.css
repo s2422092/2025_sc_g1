@@ -69,7 +69,7 @@ h1, h2, h3 {
 
 .hero p {
   font-size: 1.2rem; /* 小さめの説明文 */
-  color: #5c5c5c; /* ダークグレー */
+  color: #663300;
   margin-top: 8px; /* 上に少し余白を追加 */
   letter-spacing: 0.8px; /* 文字間隔を広げる */
 }
@@ -114,7 +114,7 @@ h1, h2, h3 {
 
 .intro .card p {
   font-size: 1rem;
-  color: #555;
+  color: #663300;
 }
 
 .intro .highlight {
