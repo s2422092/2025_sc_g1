@@ -1,11 +1,24 @@
-h1 {
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #fffaf5;
+  margin: 0;
+  padding: 0;
+}
+
+header {
   position: relative;
-  padding: 0.25em 1em;
-  border-top: solid 2px black;
-  border-bottom: solid 2px black;
+  padding: 1em;
+  border-top: solid 2px #ff7f50;
+  border-bottom: solid 2px #ff7f50;
   text-align: center;
   font-family: "arial black", Courier, monospace;
 }
+
+h1 {
+  color: #ff7f50;
+  margin-top: 20px;
+}
+
 h1:before,
 h1:after {
   content: "";
@@ -13,61 +26,132 @@ h1:after {
   top: -7px;
   width: 2px;
   height: calc(100% + 14px);
-  background-color: black;
+  background-color: #ff7f50;
 }
+
 h1:before {
   left: 7px;
 }
+
 h1:after {
   right: 7px;
 }
-.detail-info {
-  color: #545454;
-  font-family: "Courier New", Courier, monospace;
+
+.header-button {
+  position: absolute;
+  top: 35px;
+  right: 20px;
 }
-/* ここから追加するCSS */
+
+.header-button a {
+  background-color: #ff7f50;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.userdata {
+  padding: 20px;
+}
+
 .profile {
-  display: flex;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
 }
+
 .profile-header {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
+
 .profile-icon {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   margin-right: 15px;
+  border: 2px solid #ff7f50;
+  cursor: pointer;
 }
+
 .detail-info sub {
-  font-size: 0.7em;
-  vertical-align: sub;
+  font-size: 0.75em;
+  color: #777;
 }
-/* フォロー/フォロワー表示用のスタイル */
-.follow-stats {
-  display: flex; /* 子要素を横並びに */
-  gap: 20px; /* 要素間のスペース */
-  margin-top: 10px; /* profile-headerとの間のスペース */
-}
-.follow-item {
-  text-align: center; /* 数値とラベルを中央揃え */
-}
-.follow-count {
-  font-weight: bold;
-  font-size: 1.2em;
-}
-.follow-label {
-  font-size: 0.8em;
-  color: #545454;
-}
-/* 身長と体格のボックスのスタイルも考慮 */
-.box3,
-.box4 {
-  border: 1px solid #ccc; /* 枠線 */
-  padding: 5px 10px;
+
+.form-group {
   margin-top: 10px;
-  display: inline-block; /* 横並びにする場合 */
-  margin-right: 10px; /* 必要に応じて調整 */
-  border-radius: 5px; /* 角を丸く */
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #ff7f50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.follow-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 50px;
+}
+
+.follow-item {
+  text-align: center;
+  background-color: #fff8f2;
+  padding: 10px 20px;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.follow-count {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: #ff7f50;
+}
+
+.follow-label {
+  font-size: 0.9em;
+  color: #777;
+}
+
+.post-history {
+  margin-top: 30px;
+}
+
+.post-history h2 {
+  font-size: 1.2em;
+  color: #ff7f50;
+  margin-bottom: 10px;
+}
+
+.post-item {
+  background-color: #fff;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.post-item img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 5px;
 }
