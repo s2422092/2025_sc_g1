@@ -1,51 +1,125 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body{
+/* orange_theme.css */
+/* 全体の背景色 */
+body.login_body {
+    background-color: #ffdfb4; /* オレンジ系の背景色 */
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-}
-
-.login_body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f4f6f8;
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     height: 100vh;
 }
 
-
-input[type="text"],
-input[type="email"],
-input[type="password"] {
+/* コンテナの設定 */
+.container {
+    background-color: #ffffff; /* 白背景でコンテンツを際立たせる */
+    border: 2px solid #ffb84d; /* オレンジ系の枠線 */
+    border-radius: 10px; /* 角を少し丸くする */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* わずかな影を追加 */
+    padding: 20px;
     width: 100%;
-    padding: 12px;
-    margin-bottom: 16px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 16px;
+    max-width: 400px;
+    text-align: center;
 }
 
-.login_button {
-    background-color: #0078d4;
-    color: white;
+/* 見出しのデザイン */
+.container h1 {
+    color: #ff8c1a; /* 少し濃いオレンジ色 */
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* 説明文 */
+.container p {
+    color: #666; /* ダークグレーのテキスト */
+    margin-bottom: 20px;
+}
+
+/* エラーメッセージ */
+.container div[style="color: red;"] {
+    color: #e55a32; /* 赤っぽいオレンジでエラーを目立たせる */
+    background-color: #ffe6cc; /* 背景を少し薄いオレンジ */
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+/* 成功メッセージ */
+.container div[style="color: green;"] {
+    color: #2d662c; /* 緑 */
+    background-color: #e6fce6; /* 薄い緑色 */
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+/* フォーム入力フィールドのデザイン */
+.container input[type="text"],
+.container input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ffb84d; /* オレンジ枠線 */
+    border-radius: 5px; /* 入力フィールドを丸く */
+    box-sizing: border-box;
+}
+
+/* フォーム送信ボタンのデザイン */
+.container button.login_button {
+    background-color: #ff8c1a; /* 濃いオレンジ色 */
+    color: #fff; /* 白いテキスト */
     border: none;
-    padding: 12px 20px;
-    border-radius: 6px;
-    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 5px;
     cursor: pointer;
-    width: 100%;
+    font-size: 16px;
+    transition: background-color 0.3s;
 }
 
-.login_button:hover {
-    background-color: #005ea2;
+.container button.login_button:hover {
+    background-color: #ff6f00; /* ボタンのホバー状態で色を変化 */
 }
 
+/* リンクのデザイン */
+.container a {
+    display: block;
+    color: #ff8c1a; /* 濃いオレンジでリンクを際立たせる */
+    text-decoration: none;
+    margin-top: 10px;
+    font-size: 14px;
+    transition: color 0.3s;
+}
 
+.container a:hover {
+    color: #e55a32; /* ホバー状態を赤っぽいオレンジに変更 */
+}
+
+input[type="email"] {
+    width: 90%; /* 幅を揃える */
+    padding: 10px; /* 内部余白を指定 */
+    margin-bottom: 15px; /* 下に余白を追加 */
+    border: 1px solid #ffb84d; /* オレンジ枠線 */
+    border-radius: 5px; /* 角を丸くする */
+    box-sizing: border-box; /* ボックスを揃える */
+}
+
+.button {
+    display: inline-block; /* ボタンの形を強調するためのブロック表示 */
+    background-color: #ff8c1a; /* ボタンの背景色に濃いオレンジ */
+    color: #fff; /* 白い文字を表示 */
+    text-align: center; /* テキストを中央揃え */
+    padding: 10px 20px; /* ボタン内の余白を設定 */
+    margin: 10px 5px; /* 少し余白をつける */
+    text-decoration: none; /* リンクの下線を削除 */
+    border-radius: 5px; /* ボタンの角を丸くする */
+    font-size: 14px; /* テキストサイズを調整 */
+    transition: background-color 0.3s, box-shadow 0.3s; /* ホバー時の柔らかなエフェクト */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* ボタンに影を追加 */
+}
+
+/* マウスホバー時のスタイル */
+.button:hover {
+    background-color: #ff6f00; /* ホバー時に色をさらに濃くする */
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2); /* ボタンの影を濃くする */
+}

@@ -1,0 +1,73 @@
+h1 {
+  position: relative;
+  padding: 0.25em 1em;
+  border-top: solid 2px black;
+  border-bottom: solid 2px black;
+  text-align: center;
+  font-family: "arial black", Courier, monospace;
+}
+h1:before,
+h1:after {
+  content: "";
+  position: absolute;
+  top: -7px;
+  width: 2px;
+  height: calc(100% + 14px);
+  background-color: black;
+}
+h1:before {
+  left: 7px;
+}
+h1:after {
+  right: 7px;
+}
+.detail-info {
+  color: #545454;
+  font-family: "Courier New", Courier, monospace;
+}
+/* ここから追加するCSS */
+.profile {
+  display: flex;
+}
+.profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.profile-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+.detail-info sub {
+  font-size: 0.7em;
+  vertical-align: sub;
+}
+/* フォロー/フォロワー表示用のスタイル */
+.follow-stats {
+  display: flex; /* 子要素を横並びに */
+  gap: 20px; /* 要素間のスペース */
+  margin-top: 10px; /* profile-headerとの間のスペース */
+}
+.follow-item {
+  text-align: center; /* 数値とラベルを中央揃え */
+}
+.follow-count {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.follow-label {
+  font-size: 0.8em;
+  color: #545454;
+}
+/* 身長と体格のボックスのスタイルも考慮 */
+.box3,
+.box4 {
+  border: 1px solid #ccc; /* 枠線 */
+  padding: 5px 10px;
+  margin-top: 10px;
+  display: inline-block; /* 横並びにする場合 */
+  margin-right: 10px; /* 必要に応じて調整 */
+  border-radius: 5px; /* 角を丸く */
+}

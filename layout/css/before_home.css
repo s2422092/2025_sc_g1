@@ -5,12 +5,16 @@
   box-sizing: border-box;
 }
 
-/* 背景とフォント */
+/* 背景とフォント設定 */
 body {
   font-family: "Hiragino Sans", "Meiryo", sans-serif;
-  background: #f9fafb;
+  background: #ffffff; /* 背景を白に */
   color: #333;
   line-height: 1.8;
+}
+
+h1, h2, h3 {
+  font-weight: bold;
 }
 
 /* ヘッダー */
@@ -19,9 +23,9 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 16px 32px;
-  background: #4a90e2;
+  background: #ffaa42; /* オレンジ色 */
   color: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 優しい影を追加 */
 }
 
 .main-header h1 {
@@ -31,50 +35,146 @@ body {
 .main-header a {
   margin-left: 20px;
   text-decoration: none;
-  color: white;
+  color: #663300;; 
   font-weight: bold;
-  transition: opacity 0.3s;
+  padding: 8px 16px;
+  background: #fff9e6; /* ボタン背景色 */
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* ホバー時の視覚効果 */
 }
 
 .main-header a:hover {
-  opacity: 0.7;
+  background: #ffdfb4; /* ボタンホバー */
+  transform: scale(1.05); /* ホバー時にサイズを少し拡大 */
 }
 
-/* メインコンテンツ */
-.main-content {
-  max-width: 800px;
-  margin: 60px auto;
-  padding: 24px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+/* ヒーローセクション */
+.hero {
+  text-align: center; /* 中央揃え */
+  padding: 80px 20px; /* セクションの上下余白 */
+  background: linear-gradient(180deg, #fff9e6, #ffeecc); /* 明るい黄色のグラデーション */
+  border-radius: 12px; /* 角を少し丸める */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05); /* 優しい影を追加 */
+  max-width: 800px; /* 最大幅を指定 */
+  margin: 40px auto; /* セクションを中央に配置 */
 }
 
-.main-content h1 {
-  font-size: 2rem;
-  margin-bottom: 16px;
+.hero h2 {
+  font-size: 2.5rem; /* タイトルのテキストサイズを大きく */
+  color: #f38b57; /* オレンジ系の色 */
+  font-weight: bold; /* タイトルを太く */
+  margin-bottom: 16px; /* 下に余白を追加 */
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15); /* 文字に影を追加 */
+}
+
+.hero p {
+  font-size: 1.2rem; /* 小さめの説明文 */
+  color: #663300;
+  margin-top: 8px; /* 上に少し余白を追加 */
+  letter-spacing: 0.8px; /* 文字間隔を広げる */
+}
+
+
+/* サイト紹介セクション */
+.intro {
   text-align: center;
-  color: #4a90e2;
+  margin: 40px auto;
+  max-width: 1000px;
+  padding: 40px 20px;
 }
 
-.main-content p {
-  margin-bottom: 16px;
+.intro h2 {
+  font-size: 2rem;
+  color: #ff9852; /* オレンジ色で強調 */
+  margin-bottom: 24px;
+}
+
+.intro .cards {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+  flex-wrap: wrap; /* カードが複数の場合でも折り返し調整 */
+}
+
+.intro .card {
+  flex: 1;
+  background: #fff9e6; /* やわらかい黄色 */
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+  max-width: 220px;
+  text-align: center;
+}
+
+.intro .card h3 {
+  font-size: 1.5rem;
+  color: #ff7f4e; /* オレンジで絵文字とタイトルを目立たせる */
+  margin-bottom: 12px;
+}
+
+.intro .card p {
   font-size: 1rem;
+  color: #663300;
 }
 
-/* レスポンシブ */
-@media (max-width: 600px) {
-  .main-header {
+.intro .highlight {
+  color: #ff764b; /* オレンジで強調 */
+  font-weight: bold;
+}
+
+/* CTAセクション */
+.cta {
+  text-align: center;
+  padding: 40px 20px;
+  background: #ffaa42; /* オレンジ色 */
+  border-radius: 12px;
+  max-width: 800px;
+  margin: 40px auto;
+}
+
+.cta h2 {
+  font-size: 2rem;
+  color: white;
+  margin-bottom: 16px;
+}
+
+.cta p {
+  font-size: 1rem;
+  color: white;
+}
+
+/* フッター */
+.footer {
+  text-align: center;
+  padding: 16px;
+  background: #ffaa42; /* 明るいオレンジ */
+  color: white;
+}
+
+.footer p {
+  font-size: 0.9rem;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+  .intro .cards {
     flex-direction: column;
-    text-align: center;
+    align-items: center;
   }
 
-  .main-header a {
-    margin: 8px 0 0;
+  .intro .card {
+    max-width: 300px; /* スマートフォンやタブレットで表示する際の調整 */
   }
 
-  .main-content {
-    margin: 20px;
-    padding: 16px;
+  .cta, .hero {
+    max-width: 90%;
+  }
+
+  .hero h2 {
+    font-size: 2rem; /* モバイル用にタイトルサイズを調整 */
+  }
+
+  .hero p {
+    font-size: 1rem; /* 説明文のフォントサイズを小さく */
   }
 }
