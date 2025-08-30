@@ -6,6 +6,9 @@ $successMessage = '';
 $savedFiles = [];
 $comment = '';
 
+// デバッグ出力（問題解決後にコメントアウトまたは削除してください）
+// echo "セッション情報: <pre>" . print_r($_SESSION, true) . "</pre>";
+
 function connectDB() {
     $host = 'localhost';
     $dbname = 'tamaru'; // DB名
@@ -21,118 +24,129 @@ function connectDB() {
     }
 }
 
+// ここでセッションを確認 - デバッグ目的でテスト用のuidを設定（最終版では削除すること）
 if (!isset($_SESSION['uid'])) {
     $errors[] = "ログインが必要です。";
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['uid'])) {
-    $uid = $_SESSION['uid']; 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // セッションにuidがある場合のみ処理を続行
+    if (isset($_SESSION['uid'])) {
+        $uid = $_SESSION['uid']; 
 
-    // コメントの取得とバリデーション（最大40文字 - テーブル定義に合わせる）
-    $comment = trim($_POST['comment'] ?? '');
-    if (mb_strlen($comment) > 40) {
-        $errors[] = "コメントは最大40文字までです。";
-    }
-
-    // ファイルアップロードチェック（最大5枚）
-    if (!isset($_FILES['photos']) || empty($_FILES['photos']['name'][0])) {
-        $errors[] = "画像が選択されていません。";
-    } else {
-        $photos = $_FILES['photos'];
-
-        // ファイル数のチェック
-        if (count($photos['name']) > 5) {
-            $errors[] = "画像は最大5枚まで選択可能です。";
+        // コメントの取得とバリデーション（最大40文字 - テーブル定義に合わせる）
+        $comment = trim($_POST['comment'] ?? '');
+        if (mb_strlen($comment) > 40) {
+            $errors[] = "コメントは最大40文字までです。";
         }
 
-        // エラーがない場合のみ、個々のファイルチェックを行う
-        if (empty($errors)) {
-            for ($i = 0; $i < count($photos['name']); $i++) {
-                // PHPアップロードエラーのチェック
-                if ($photos['error'][$i] !== UPLOAD_ERR_OK) {
-                    $errors[] = "画像アップロードに失敗しました (" . htmlspecialchars($photos['name'][$i]) . ")。エラーコード: " . $photos['error'][$i];
-                    continue; // 次のファイルへ
-                }
+        // ファイルアップロードチェック（最大5枚）
+        if (!isset($_FILES['photos']) || empty($_FILES['photos']['name'][0])) {
+            $errors[] = "画像が選択されていません。";
+        } else {
+            $photos = $_FILES['photos'];
 
-                // 画像ファイルかどうか簡易チェック（MIMEタイプ）
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $mimeType = finfo_file($finfo, $photos['tmp_name'][$i]);
-                finfo_close($finfo);
+            // ファイル数のチェック
+            if (count($photos['name']) > 5) {
+                $errors[] = "画像は最大5枚まで選択可能です。";
+            }
 
-                if (!in_array($mimeType, ['image/jpeg', 'image/png', 'image/gif'])) {
-                    $errors[] = "許可されていないファイル形式です (" . htmlspecialchars($photos['name'][$i]) . ")。許可されるのはJPEG, PNG, GIFです。";
+            // エラーがない場合のみ、個々のファイルチェックを行う
+            if (empty($errors)) {
+                for ($i = 0; $i < count($photos['name']); $i++) {
+                    // PHPアップロードエラーのチェック
+                    if ($photos['error'][$i] !== UPLOAD_ERR_OK) {
+                        $errors[] = "画像アップロードに失敗しました (" . htmlspecialchars($photos['name'][$i]) . ")。エラーコード: " . $photos['error'][$i];
+                        continue; // 次のファイルへ
+                    }
+
+                    // 画像ファイルかどうか簡易チェック（MIMEタイプ）
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $mimeType = finfo_file($finfo, $photos['tmp_name'][$i]);
+                    finfo_close($finfo);
+
+                    if (!in_array($mimeType, ['image/jpeg', 'image/png', 'image/gif'])) {
+                        $errors[] = "許可されていないファイル形式です (" . htmlspecialchars($photos['name'][$i]) . ")。許可されるのはJPEG, PNG, GIFです。";
+                    }
                 }
             }
         }
-    }
 
-    // 全てのバリデーションを通過した場合のみ、ファイル保存処理を実行
-    if (empty($errors)) {
-        // 保存先ディレクトリ（存在しなければ作成）
-        $uploadDir = __DIR__ . '/uploads/';
-        if (!is_dir($uploadDir)) {
-            if (!mkdir($uploadDir, 0755, true)) { // trueで再帰的にディレクトリを作成
-                $errors[] = "アップロードディレクトリの作成に失敗しました。";
-            }
-        }
-
-        // ディレクトリ作成成功、または既に存在する場合のみファイル保存
+        // 全てのバリデーションを通過した場合のみ、ファイル保存処理を実行
         if (empty($errors)) {
-            foreach ($photos['name'] as $index => $name) {
-                // アップロード時にエラーが発生しなかったファイルのみ処理
-                if ($photos['error'][$index] === UPLOAD_ERR_OK) {
-                    $ext = pathinfo($name, PATHINFO_EXTENSION);
-                    do {
-                        $filename = uniqid('img_', true) . "." . $ext;
-                        $filepath = $uploadDir . $filename;
-                    } while (file_exists($filepath)); // ユニークなファイル名が生成されるまで繰り返す
+            // 既存のディレクトリを使用
+            $uploadDir = 'uploads/';
+            
+            // 指定したディレクトリが存在するか確認
+            if (!is_dir($uploadDir)) {
+                $errors[] = "指定されたアップロードディレクトリが存在しません。";
+            }
+            
+            // 書き込み権限があるか確認
+            if (empty($errors) && !is_writable($uploadDir)) {
+                $errors[] = "アップロードディレクトリに書き込み権限がありません。";
+            }
 
-                    if (move_uploaded_file($photos["tmp_name"][$index], $filepath)) {
-                        // Webアクセス用パスに変換
-                        $savedFiles[] = 'uploads/' . basename($filename);
+            // ディレクトリ存在確認後、ファイル保存
+            if (empty($errors)) {
+                foreach ($photos['name'] as $index => $name) {
+                    // アップロード時にエラーが発生しなかったファイルのみ処理
+                    if ($photos['error'][$index] === UPLOAD_ERR_OK) {
+                        $ext = pathinfo($name, PATHINFO_EXTENSION);
+                        do {
+                            $filename = uniqid('img_', true) . "." . $ext;
+                            $filepath = $uploadDir . $filename;
+                        } while (file_exists($filepath)); // ユニークなファイル名が生成されるまで繰り返す
+
+                        if (move_uploaded_file($photos["tmp_name"][$index], $filepath)) {
+                            // 保存先のパスを記録
+                            $savedFiles[] = $uploadDir . basename($filename);
+                        } else {
+                            $errors[] = "ファイルの保存に失敗しました (" . htmlspecialchars($name) . ")。パス: " . $filepath;
+                        }
+                    }
+                }
+            }
+
+            if (empty($errors)) {
+                try {
+                    $pdo = connectDB();
+                    
+                    // PostgreSQLの配列形式に変換
+                    $imagePathsLiteral = "{";
+                    foreach ($savedFiles as $index => $path) {
+                        if ($index > 0) {
+                            $imagePathsLiteral .= ",";
+                        }
+                        $imagePathsLiteral .= '"' . str_replace('"', '\"', $path) . '"';
+                    }
+                    $imagePathsLiteral .= "}";
+
+                    $stmt = $pdo->prepare("INSERT INTO post_coordinate (uid, post_text, coordinateImage_path) VALUES (:uid, :post_text, :coordinateImage_path)");
+                    
+                    $stmt->bindParam(':uid', $uid, PDO::PARAM_INT);
+                    $stmt->bindParam(':post_text', $comment, PDO::PARAM_STR);
+                    $stmt->bindParam(':coordinateImage_path', $imagePathsLiteral, PDO::PARAM_STR);
+                    
+                    if ($stmt->execute()) {
+                        $successMessage = "投稿成功！";
                     } else {
-                        $errors[] = "ファイルの保存に失敗しました (" . htmlspecialchars($name) . ")。";
+                        $errors[] = "データベースへの投稿に失敗しました。";
+                    }
+                } catch (Exception $e) {
+                    $errors[] = "エラー: " . $e->getMessage();
+                    
+                    // データベース保存失敗時はファイルも削除
+                    foreach ($savedFiles as $path) {
+                        if (file_exists($path)) {
+                            unlink($path);
+                        }
                     }
                 }
             }
         }
-
-        if (empty($errors)) {
-            try {
-                
-                $pdo = connectDB();
-                
-                $imagePathsLiteral = "{";
-                foreach ($savedFiles as $index => $path) {
-                    if ($index > 0) {
-                        $imagePathsLiteral .= ",";
-                    }
-                    $imagePathsLiteral .= '"' . str_replace('"', '\"', $path) . '"';
-                }
-                $imagePathsLiteral .= "}";
-
-                $stmt = $pdo->prepare("INSERT INTO post_coordinate (uid, post_text, coordinateImage_path) VALUES (:uid, :post_text, :coordinateImage_path)");
-                
-                $stmt->bindParam(':uid', $uid, PDO::PARAM_INT);
-                $stmt->bindParam(':post_text', $comment, PDO::PARAM_STR);
-                $stmt->bindParam(':coordinateImage_path', $imagePathsLiteral, PDO::PARAM_STR);
-                
-                if ($stmt->execute()) {
-                    $successMessage = "投稿成功！";
-                } else {
-                    $errors[] = "データベースへの投稿に失敗しました。";
-                }
-            } catch (Exception $e) {
-                $errors[] = "エラー: " . $e->getMessage();
-                
-                foreach ($savedFiles as $path) {
-                    $fullPath = __DIR__ . '/' . $path;
-                    if (file_exists($fullPath)) {
-                        unlink($fullPath);
-                    }
-                }
-            }
-        }
+    } else {
+        $errors[] = "ログインが必要です。";
     }
 }
 ?>
