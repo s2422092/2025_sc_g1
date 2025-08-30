@@ -25,6 +25,10 @@ try {
     ");
     $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        // compliment_list の褒め言葉を取得
+    $stmt = $pdo->query("SELECT compliment_text FROM compliment_list ORDER BY compliment_id");
+    $compliments = $stmt->fetchAll(PDO::FETCH_COLUMN); // 配列で取得
+
 } catch (PDOException $e) {
     die("DB接続エラー: " . $e->getMessage());
 }
@@ -175,9 +179,19 @@ try {
                 <button class="comment-submit">投稿</button>
             </div>
 
-             <h2>ユーザー情報</h2>
-            <div id="modal-user-details"><!-- JSで切り替える --></div>
+            <div class="comment-header">
+                <h2>ユーザー情報</h2>
+                <div id="modal-user-details"></div> <!-- ここに表示 -->
+            </div>
 
+            <div class="photo-scroll">
+                <?php foreach ($posts as $index => $post): ?>
+                    <div class="photo-slide" data-index="<?= $index ?>">
+                        <h3><?= htmlspecialchars($post['uname']) ?>さんの投稿</h3>
+                        <p><?= htmlspecialchars($post['post_text']) ?></p>
+                    </div>
+                <?php endforeach; ?>
+            </div>
 
                 <div class="compliment-summary">
                     <div class="compliment-item">
@@ -269,7 +283,7 @@ function updateUserInfo(index) {
         <p>体型: ${post.frame || '未設定'}</p>
     `;
 }
-updateUserInfo(0);
+
 
 const modalUserDetails = document.getElementById('modal-user-details');
 
@@ -287,6 +301,7 @@ function updateUserInfo(index) {
     modalUserDetails.innerHTML = html; // モーダルにも反映
 }
 
+updateUserInfo(0); // 最初の投稿のユーザー情報を表示
 
 // スクロールイベント
 const scrollContainer = document.querySelector('.photo-scroll');
