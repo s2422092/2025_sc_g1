@@ -218,38 +218,11 @@ try {
                     <button class="comment-submit">投稿</button>
                 </div>
 
-                <?php foreach ($posts as $p): ?>
-                    <div class="compliment-summary">
-                        <?php if (!empty($p['compliment_summary'])): ?>
-                            <?php foreach ($p['compliment_summary'] as $cs): ?>
-                                <div class="compliment-item">
-                                    <p class="compliment-title"><?= htmlspecialchars($cs['compliment_text']) ?>: <?= $cs['compliment_count'] ?>件</p>
-                                    <div class="compliment-users" style="display:none;">
-                                        <?php foreach ($p['compliment_users'][$cs['compliment_text']] as $uname): ?>
-                                            <p><?= htmlspecialchars($uname) ?></p>
-                                        <?php endforeach; ?>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <p>コメントはまだありません</p>
-                        <?php endif; ?>
-                    </div>
-                <?php endforeach; ?>
-
-
-
-                <div class="comment-list">
-                    <?php if (!empty($post['compliments'])): ?>
-                        <?php foreach ($post['compliments'] as $c): ?>
-                            <p><?= htmlspecialchars($c['uname']) ?>: <?= htmlspecialchars($c['compliment_text']) ?></p>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <p>コメントはまだありません</p>
-                    <?php endif; ?>
-                </div>
-
+                <!-- コメントと褒め言葉まとめを動的に描画 -->
+                <div class="compliment-summary"></div>
+                <div class="comment-list"></div>
             </div>
+
         </div>
 
 
@@ -392,13 +365,13 @@ document.querySelector('.arrow-left').addEventListener('click', () => {
     }
 });
 
-// 🔽 投稿が切り替わったときは画像インデックスをリセット
 function updateUserInfo(index) {
-    currentPostIndex = index;   // 今の投稿インデックスを保存
-    currentImageIndex = 0;      // 新しい投稿を見たら最初の画像に戻す
+    currentPostIndex = index;   // 今の投稿インデックス
+    currentImageIndex = 0;      // 最初の画像に戻す
 
     const post = posts[index];
-    // プロフィール情報と最初の画像の表示
+
+    // 🔹ユーザー情報の更新
     const html = `
         <img src="${post.profileImage || 'uploads/default.png'}" alt="プロフィール画像" style="width:80px;height:80px;border-radius:50%;">
         <p><strong>${post.uname}</strong></p>
@@ -413,7 +386,7 @@ function updateUserInfo(index) {
         mainImage.src = 'uploads/default.png';
     }
 
-    // フォローボタン制御
+    // 🔹フォローボタンの制御
     if (post.is_following) {
         followBtn.innerText = 'フォロー済み';
         followBtn.disabled = true;
@@ -422,8 +395,9 @@ function updateUserInfo(index) {
         followBtn.disabled = false;
     }
 
+    // 🔹コメントリストの更新
     const commentList = document.querySelector('.comment-list');
-    commentList.innerHTML = ""; // 一旦クリア
+    commentList.innerHTML = ""; 
     if (post.compliments && post.compliments.length > 0) {
         post.compliments.forEach(c => {
             const p = document.createElement('p');
@@ -433,9 +407,48 @@ function updateUserInfo(index) {
     } else {
         commentList.innerHTML = "<p>コメントはまだありません</p>";
     }
-    
+
+    // 🔹褒め言葉まとめの更新
+    updateComplimentSummary(index);
 }
 
+function updateComplimentSummary(index) {
+    const summaryContainer = document.querySelector('.compliment-summary');
+    summaryContainer.innerHTML = ""; 
+
+    const post = posts[index];
+    if (post.compliment_summary && post.compliment_summary.length > 0) {
+        post.compliment_summary.forEach(cs => {
+            const div = document.createElement('div');
+            div.classList.add('compliment-item');
+
+            let html = `<p class="compliment-title">${cs.compliment_text}: ${cs.compliment_count}件</p><div class="compliment-users" style="display:none;">`;
+
+            if (post.compliment_users && post.compliment_users[cs.compliment_text]) {
+                post.compliment_users[cs.compliment_text].forEach(user => {
+                    html += `<p>${user}</p>`;
+                });
+            }
+
+            html += `</div>`;
+            div.innerHTML = html;
+            summaryContainer.appendChild(div);
+        });
+
+        // クリックで開閉
+        summaryContainer.querySelectorAll('.compliment-title').forEach(item => {
+            item.addEventListener('click', () => {
+                const usersDiv = item.nextElementSibling;
+                usersDiv.style.display =
+                    usersDiv.style.display === 'none' || usersDiv.style.display === ''
+                        ? 'block'
+                        : 'none';
+            });
+        });
+    } else {
+        summaryContainer.innerHTML = "<p>コメントはまだありません</p>";
+    }
+}
 
 updateUserInfo(0); // 最初の投稿表示
 
