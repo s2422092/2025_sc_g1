@@ -24,8 +24,8 @@ form {
     flex-direction: column;
     gap: 20px;
     align-items: center;
-}  label 
-{
+}
+label {
     font-weight: bold;
     margin-bottom: 5px;
     align-self: flex-start;
@@ -144,4 +144,20 @@ ul.uploaded-photos li {
     max-height: 100%;
     display: block;
     object-fit: contain;
+}
+
+  /* ✅ 追加されたボタンスタイル */
+.btn-flat-dashed-filled {
+    display: inline-block;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    color: #ff8800;
+    border: dashed 1px #ff8800;
+    background: #fff3e0;
+    border-radius: 3px;
+    transition: .4s;
+}
+.btn-flat-dashed-filled:hover {
+    background: #ffbb66;
+    color: #fff;
 }
