@@ -220,7 +220,6 @@ try {
 
                 <!-- コメントと褒め言葉まとめを動的に描画 -->
                 <div class="compliment-summary"></div>
-                <div class="comment-list"></div>
             </div>
 
         </div>
@@ -278,7 +277,6 @@ try {
 
                 <!-- コメントと褒め言葉まとめを動的に描画 -->
                 <div class="compliment-summary"></div>
-                <div class="comment-list"></div>
             </div>
 
         </div>
