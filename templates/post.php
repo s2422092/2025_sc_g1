@@ -17,9 +17,9 @@ $comment = '';
 
 function connectDB() {
 $host = 'localhost';
-$dbname = 's_yugo'; // DB名
-$user = 's_yugo';   // DBユーザー
-$password = '9fjrtvAy'; // DBパスワード
+$dbname = 'soto'; // DB名
+$user = 'soto';   // DBユーザー
+$password = 'IGEGk80k'; // DBパスワード
 
 
     try {
@@ -172,54 +172,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <a href="home.php" class="button">ホームに戻る</a>
 
 <div class="container">
-    <h1>写真投稿</h1>
+    
+<h1>写真投稿フォーム</h1>
 
-    <?php if (!empty($errors)): ?>
-        <div class="error-message">
-            <p><strong>エラーが発生しました:</strong></p>
-            <ul>
-                <?php foreach ($errors as $error): ?>
-                    <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    <?php elseif (!empty($successMessage)): ?>
-        <div class="success-message">
-            <p><strong><?php echo htmlspecialchars($successMessage); ?></strong></p>
-            <p>コメント: <?php echo htmlspecialchars($comment); ?></p>
-            <?php if (!empty($savedFiles)): ?>
-                <p>アップロードした写真:</p>
-                <ul class="uploaded-photos">
-                    <?php foreach ($savedFiles as $_filePath): ?>
-                        <li><img src="<?php echo htmlspecialchars($_filePath); ?>" alt="Uploaded Image"></li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php else: ?>
-                <p>ファイルはアップロードされませんでした。</p>
-            <?php endif; ?>
-        </div>
-    <?php endif; ?>
+<?php if (!empty($errors)): ?>
+  <div class="error-message">
+    <ul>
+      <?php foreach ($errors as $error): ?>
+        <li><?= htmlspecialchars($error) ?></li>
+      <?php endforeach; ?>
+    </ul>
+  </div>
+<?php endif; ?>
 
-    <form action="" method="post" enctype="multipart/form-data">
-        <label for="photo">写真を選択してください（最大5枚）</label>
-        <input type="file" name="photos[]" id="photo" accept=".jpg,.jpeg,.png,.gif" multiple required>
+<?php if (!empty($successMessage)): ?>
+  <div class="success-message"><?= htmlspecialchars($successMessage) ?></div>
+<?php endif; ?>
 
-        <!-- プレビュー表示用のコンテナを追加 -->
-        <div id="preview-container" class="preview-container">
-            <p id="preview-text" style="display none;">選択された写真:</p>
-            <div id="photo-previews" class="photo-previews">
-                <!-- プレビュー画像がJavaScriptによってここに追加される -->
-            </div>
-        </div>
+<form method="post" enctype="multipart/form-data">
+  <label for="photos">写真を選択してください（最大5枚）</label>
+  <input type="file" name="photos[]" multiple accept="image/*">
 
-        <label for="comment">コメント（最大20文字）</label>
-        <input type="text" name="comment" id="comment" maxlength="20" 　placeholder="例：今日のお出かけコーデ"　required value="<?php echo htmlspecialchars($comment); ?>">
+  <label for="comment">コメント（最大40文字）</label>
+  <input type="text" name="comment" maxlength="40">
 
-        <div class="form-actions">
-            <!-- 投稿するボタンはフォーム内に残す -->
-            <button type="submit">投稿する</button>
-        </div>
-    </form>
+  <div class="form-actions">
+    <button type="submit" class="btn-flat-dashed-filled">投稿する</button>
+  </div>
+</form>
+
 </div>
 
 <script>
