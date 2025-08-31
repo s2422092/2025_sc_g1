@@ -357,38 +357,11 @@ document.querySelector('.arrow-left').addEventListener('click', () => {
     }
 });
 
-function updateUserInfo(index) {
-    currentPostIndex = index;   // 今の投稿インデックス
-    currentImageIndex = 0;      // 最初の画像に戻す
-
+function updateCommentBox(index, container) {
     const post = posts[index];
 
-    // 🔹ユーザー情報の更新
-    const html = `
-        <img src="${post.profileImage || 'uploads/default.png'}" alt="プロフィール画像" style="width:80px;height:80px;border-radius:50%;">
-        <p><strong>${post.uname}</strong></p>
-        <p>身長: ${post.height || '未設定'}</p>
-        <p>体型: ${post.frame || '未設定'}</p>
-    `;
-    document.getElementById('user-details').innerHTML = html;
-
-    if (post.coordinateImage_array && post.coordinateImage_array.length > 0) {
-        mainImage.src = post.coordinateImage_array[0].trim();
-    } else {
-        mainImage.src = 'uploads/default.png';
-    }
-
-    // 🔹フォローボタンの制御
-    if (post.is_following) {
-        followBtn.innerText = 'フォロー済み';
-        followBtn.disabled = true;
-    } else {
-        followBtn.innerText = 'フォロー';
-        followBtn.disabled = false;
-    }
-
-    // 🔹コメントリストの更新
-    const commentList = document.querySelector('.comment-list');
+    // 🔹 コメント一覧更新
+    const commentList = container.querySelector('.comment-list');
     commentList.innerHTML = ""; 
     if (post.compliments && post.compliments.length > 0) {
         post.compliments.forEach(c => {
@@ -400,8 +373,81 @@ function updateUserInfo(index) {
         commentList.innerHTML = "<p>コメントはまだありません</p>";
     }
 
-    // 🔹褒め言葉まとめの更新
-    updateComplimentSummary(index);
+    // 🔹 褒め言葉まとめ更新
+    const summaryContainer = container.querySelector('.compliment-summary');
+    summaryContainer.innerHTML = "";
+
+    if (post.compliment_summary && post.compliment_summary.length > 0) {
+        post.compliment_summary.forEach(cs => {
+            const div = document.createElement('div');
+            div.classList.add('compliment-item');
+
+            let usersHTML = "";
+            if (post.compliment_users && post.compliment_users[cs.compliment_text]) {
+                post.compliment_users[cs.compliment_text].forEach(user => {
+                    usersHTML += `<p>${user}</p>`;
+                });
+            }
+
+            div.innerHTML = `
+                <p class="compliment-title">${cs.compliment_text}: ${cs.compliment_count}件</p>
+                <div class="compliment-users" style="display:none;">${usersHTML}</div>
+            `;
+            summaryContainer.appendChild(div);
+        });
+
+        summaryContainer.querySelectorAll('.compliment-title').forEach(item => {
+            item.addEventListener('click', () => {
+                const usersDiv = item.nextElementSibling;
+                usersDiv.style.display =
+                    usersDiv.style.display === 'none' || usersDiv.style.display === ''
+                        ? 'block'
+                        : 'none';
+            });
+        });
+    } else {
+        summaryContainer.innerHTML = "<p>コメントはまだありません</p>";
+    }
+}
+
+function updateUserInfo(index) {
+    currentPostIndex = index;
+    currentImageIndex = 0;
+    const post = posts[index];
+
+    // 🔹 ユーザー情報更新
+    const html = `
+        <img src="${post.profileImage || 'uploads/default.png'}" alt="プロフィール画像" style="width:80px;height:80px;border-radius:50%;">
+        <p><strong>${post.uname}</strong></p>
+        <p>身長: ${post.height || '未設定'}</p>
+        <p>体型: ${post.frame || '未設定'}</p>
+    `;
+    document.getElementById('user-details').innerHTML = html;
+    document.getElementById('modal-user-details').innerHTML = html;
+
+    // 🔹画像
+    if (post.coordinateImage_array && post.coordinateImage_array.length > 0) {
+        mainImage.src = post.coordinateImage_array[0].trim();
+    } else {
+        mainImage.src = 'uploads/default.png';
+    }
+
+    // 🔹フォローボタン
+    if (post.is_following) {
+        followBtn.innerText = 'フォロー済み';
+        followBtn.disabled = true;
+    } else {
+        followBtn.innerText = 'フォロー';
+        followBtn.disabled = false;
+    }
+
+    // 🔹メインのコメント欄を更新
+    const mainCommentBox = document.querySelector('.comment-box');
+    updateCommentBox(index, mainCommentBox);
+
+    // 🔹モーダルのコメント欄を更新
+    const modalCommentBox = document.querySelector('#commentModal .comment-box');
+    updateCommentBox(index, modalCommentBox);
 }
 
 
