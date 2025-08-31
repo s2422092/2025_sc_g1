@@ -259,35 +259,27 @@ try {
             </div>
 
                 
-            <?php foreach ($posts as $p): ?>
-                <div class="compliment-summary">
-                    <?php if (!empty($p['compliment_summary'])): ?>
-                        <?php foreach ($p['compliment_summary'] as $cs): ?>
-                            <div class="compliment-item">
-                                <p class="compliment-title"><?= htmlspecialchars($cs['compliment_text']) ?>: <?= $cs['compliment_count'] ?>件</p>
-                                <div class="compliment-users" style="display:none;">
-                                    <?php foreach ($p['compliment_users'][$cs['compliment_text']] as $uname): ?>
-                                        <p><?= htmlspecialchars($uname) ?></p>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <p>コメントはまだありません</p>
-                    <?php endif; ?>
+            <div class="comment-box">
+                <div class="comment-header">
+                    <h2>コメント欄</h2>
                 </div>
-            <?php endforeach; ?>
-
-
-                <div class="comment-list">
-                    <?php if (!empty($post['compliments'])): ?>
-                        <?php foreach ($post['compliments'] as $c): ?>
-                            <p><?= htmlspecialchars($c['uname']) ?>: <?= htmlspecialchars($c['compliment_text']) ?></p>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <p>コメントはまだありません</p>
-                    <?php endif; ?>
+                
+                <div class="comment-input">
+                    <div id="complimentSelect-wrapper">
+                        <select id="complimentSelect">
+                            <option value="">褒め言葉を選択</option>
+                            <?php foreach ($compliments as $c): ?>
+                                <option value="<?= htmlspecialchars($c) ?>"><?= htmlspecialchars($c) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <button class="comment-submit">投稿</button>
                 </div>
+
+                <!-- コメントと褒め言葉まとめを動的に描画 -->
+                <div class="compliment-summary"></div>
+                <div class="comment-list"></div>
+            </div>
 
         </div>
 
@@ -412,6 +404,7 @@ function updateUserInfo(index) {
     updateComplimentSummary(index);
 }
 
+
 function updateComplimentSummary(index) {
     const summaryContainer = document.querySelector('.compliment-summary');
     summaryContainer.innerHTML = ""; 
@@ -422,20 +415,26 @@ function updateComplimentSummary(index) {
             const div = document.createElement('div');
             div.classList.add('compliment-item');
 
-            let html = `<p class="compliment-title">${cs.compliment_text}: ${cs.compliment_count}件</p><div class="compliment-users" style="display:none;">`;
-
+            // ユーザー一覧のHTMLを先に作る
+            let usersHTML = "";
             if (post.compliment_users && post.compliment_users[cs.compliment_text]) {
                 post.compliment_users[cs.compliment_text].forEach(user => {
-                    html += `<p>${user}</p>`;
+                    usersHTML += `<p>${user}</p>`;
                 });
             }
 
-            html += `</div>`;
-            div.innerHTML = html;
+            // 褒め言葉＋ユーザー一覧HTML
+            div.innerHTML = `
+                <p class="compliment-title">${cs.compliment_text}: ${cs.compliment_count}件</p>
+                <div class="compliment-users" style="display:none;">
+                    ${usersHTML}
+                </div>
+            `;
+
             summaryContainer.appendChild(div);
         });
 
-        // クリックで開閉
+        // 🔹 クリックイベントを褒め言葉タイトルに付与
         summaryContainer.querySelectorAll('.compliment-title').forEach(item => {
             item.addEventListener('click', () => {
                 const usersDiv = item.nextElementSibling;
@@ -449,6 +448,8 @@ function updateComplimentSummary(index) {
         summaryContainer.innerHTML = "<p>コメントはまだありません</p>";
     }
 }
+
+
 
 updateUserInfo(0); // 最初の投稿表示
 
