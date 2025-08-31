@@ -81,6 +81,38 @@ try {
         $post['coordinateImage_array'] = $paths ? explode(',', $paths) : [];
     }
 
+    foreach ($posts as &$post) {
+    // 褒め言葉集計
+    $stmt = $pdo->prepare("
+        SELECT c.compliment_text, COUNT(pc.compliment_id) AS compliment_count
+        FROM post_compliment pc
+        JOIN compliment_list c ON pc.compliment_id = c.compliment_id
+        WHERE pc.post_id = ?
+        GROUP BY c.compliment_text
+        ORDER BY compliment_count DESC
+    ");
+    $stmt->execute([$post['post_id']]);
+    $post['compliment_summary'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // 褒め言葉ごとのユーザー
+    $stmt = $pdo->prepare("
+        SELECT c.compliment_text, ua.uname
+        FROM post_compliment pc
+        JOIN compliment_list c ON pc.compliment_id = c.compliment_id
+        JOIN userauth ua ON pc.uid = ua.uid
+        WHERE pc.post_id = ?
+        ORDER BY c.compliment_text, ua.uname
+    ");
+    $stmt->execute([$post['post_id']]);
+    $compliment_users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // 配列にまとめ直す
+    $post['compliment_users'] = [];
+    foreach ($compliment_users as $cu) {
+        $post['compliment_users'][$cu['compliment_text']][] = $cu['uname'];
+    }
+}
+
 
 } catch (PDOException $e) {
     die("DB接続エラー: " . $e->getMessage());
@@ -186,39 +218,26 @@ try {
                     <button class="comment-submit">投稿</button>
                 </div>
 
-                <div class="compliment-summary">
-                    <div class="compliment-item">
-                        <p class="compliment-title">すごい！！: 130件</p>
-                        <div class="compliment-users">
-                        <p>ユーザー名a</p>
-                        <p>ユーザー名b</p>
-                        <p>ユーザー名c</p>
-                        <p>ユーザー名d</p>
-                        <p>ユーザー名e</p>
-                        <p>ユーザー名f</p>
-                        <p>ユーザー名g</p>
-                        <p>ユーザー名h</p>
-                        <p>ユーザー名i</p>
-                        <p>ユーザー名j</p>
-                        <p>ユーザー名k</p>
-                        </div>
+                <?php foreach ($posts as $p): ?>
+                    <div class="compliment-summary">
+                        <?php if (!empty($p['compliment_summary'])): ?>
+                            <?php foreach ($p['compliment_summary'] as $cs): ?>
+                                <div class="compliment-item">
+                                    <p class="compliment-title"><?= htmlspecialchars($cs['compliment_text']) ?>: <?= $cs['compliment_count'] ?>件</p>
+                                    <div class="compliment-users" style="display:none;">
+                                        <?php foreach ($p['compliment_users'][$cs['compliment_text']] as $uname): ?>
+                                            <p><?= htmlspecialchars($uname) ?></p>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>コメントはまだありません</p>
+                        <?php endif; ?>
                     </div>
+                <?php endforeach; ?>
 
-                    <div class="compliment-item">
-                        <p class="compliment-title">素晴らしい！: 120件</p>
-                        <div class="compliment-users">
-                        <p>ユーザー名d</p>
-                        <p>ユーザー名e</p>
-                        </div>
-                    </div>
 
-                    <div class="compliment-item">
-                        <p class="compliment-title">最高！: 95件</p>
-                        <div class="compliment-users">
-                        <p>ユーザー名f</p>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="comment-list">
                     <?php if (!empty($post['compliments'])): ?>
@@ -266,48 +285,36 @@ try {
                 <?php endforeach; ?>
             </div>
 
+                
+            <?php foreach ($posts as $p): ?>
                 <div class="compliment-summary">
-                    <div class="compliment-item">
-                        <p class="compliment-title">すごい！！: 130件</p>
-                        <div class="compliment-users">
-                        <p>ユーザー名a</p>
-                        <p>ユーザー名b</p>
-                        <p>ユーザー名c</p>
-                        <p>ユーザー名d</p>
-                        <p>ユーザー名e</p>
-                        <p>ユーザー名f</p>
-                        <p>ユーザー名g</p>
-                        <p>ユーザー名h</p>
-                        <p>ユーザー名i</p>
-                        <p>ユーザー名j</p>
-                        <p>ユーザー名k</p>
-                        </div>
-                    </div>
-
-                    <div class="compliment-item">
-                        <p class="compliment-title">素晴らしい！: 120件</p>
-                        <div class="compliment-users">
-                        <p>ユーザー名d</p>
-                        <p>ユーザー名e</p>
-                        </div>
-                    </div>
-
-                    <div class="compliment-item">
-                        <p class="compliment-title">最高！: 95件</p>
-                        <div class="compliment-users">
-                        <p>ユーザー名f</p>
-                        </div>
-                    </div>
+                    <?php if (!empty($p['compliment_summary'])): ?>
+                        <?php foreach ($p['compliment_summary'] as $cs): ?>
+                            <div class="compliment-item">
+                                <p class="compliment-title"><?= htmlspecialchars($cs['compliment_text']) ?>: <?= $cs['compliment_count'] ?>件</p>
+                                <div class="compliment-users" style="display:none;">
+                                    <?php foreach ($p['compliment_users'][$cs['compliment_text']] as $uname): ?>
+                                        <p><?= htmlspecialchars($uname) ?></p>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p>コメントはまだありません</p>
+                    <?php endif; ?>
                 </div>
-            <div class="comment-list">
-                <?php if (!empty($post['compliments'])): ?>
-                    <?php foreach ($post['compliments'] as $c): ?>
-                        <p><?= htmlspecialchars($c['uname']) ?>: <?= htmlspecialchars($c['compliment_text']) ?></p>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p>コメントはまだありません</p>
-                <?php endif; ?>
-            </div>
+            <?php endforeach; ?>
+
+
+                <div class="comment-list">
+                    <?php if (!empty($post['compliments'])): ?>
+                        <?php foreach ($post['compliments'] as $c): ?>
+                            <p><?= htmlspecialchars($c['uname']) ?>: <?= htmlspecialchars($c['compliment_text']) ?></p>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p>コメントはまだありません</p>
+                    <?php endif; ?>
+                </div>
 
         </div>
 
@@ -490,6 +497,45 @@ document.querySelector('.comment-submit').addEventListener('click', () => {
     })
     .catch(err => console.error(err));
 });
+
+document.querySelectorAll('.compliment-title').forEach(item => {
+    item.addEventListener('click', () => {
+        const usersDiv = item.nextElementSibling;
+        usersDiv.style.display =
+            usersDiv.style.display === 'none' || usersDiv.style.display === ''
+                ? 'block'
+                : 'none';
+    });
+});
+
+function updateComplimentSummary(index) {
+    const summaryContainer = document.querySelector('.compliment-summary');
+    summaryContainer.innerHTML = ""; 
+
+    const post = posts[index];
+    if (post.compliment_summary && post.compliment_summary.length > 0) {
+        post.compliment_summary.forEach(cs => {
+            const div = document.createElement('div');
+            div.classList.add('compliment-item');
+
+            let html = `<p class="compliment-title">${cs.compliment_text}: ${cs.compliment_count}件</p><div class="compliment-users" style="display:none;">`;
+
+            if (post.compliment_users[cs.compliment_text]) {
+                post.compliment_users[cs.compliment_text].forEach(user => {
+                    html += `<p>${user}</p>`;
+                });
+            }
+
+            html += `</div>`;
+            div.innerHTML = html;
+            summaryContainer.appendChild(div);
+        });
+    } else {
+        summaryContainer.innerHTML = "<p>コメントはまだありません</p>";
+    }
+}
+updateComplimentSummary(index);
+
 
 
 </script>
