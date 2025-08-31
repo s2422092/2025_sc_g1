@@ -13,7 +13,7 @@ body {
 
 /* ====== ヘッダー ====== */
 .main-header {
-    background-color: #9f9e9e;
+    background-color: #ffc477;
     display: flex;
     justify-content: center; /* nav を中央に寄せる */
     align-items: center;
@@ -38,22 +38,23 @@ body {
 }
 
 .search-input:focus {
-  border-color: #666;
+  border-color: #ff8c1a; /* フォーカス時にオレンジ色の枠線 */
 }
 
 .search-button {
   padding: 5px 12px;
   margin-left: 5px;
-  background-color: #444;
+  background-color: #e67300; /* ボタンを暗めのオレンジに変更 */
   color: white;
   border: none;
   border-radius: 20px;
   cursor: pointer;
   transition: background 0.3s;
+
 }
 
 .search-button:hover {
-  background-color: #666;
+  background-color: #ff5700; /* ホバー時に濃いオレンジ */
 }
 
 .main-header nav {
@@ -65,7 +66,7 @@ body {
 
 
 .main-header nav a {
-  color: #666;
+  color: #ffc477; /* ナビゲーションリンクを薄いオレンジ */
   text-decoration: none;
   font-weight: 500;
   padding: 8px 16px;
@@ -74,12 +75,12 @@ body {
 }
 
 .main-header nav a:hover {
-  background-color: #555;
-  color: #fff;
+  background-color: #ff5700; /* ホバー時に濃いオレンジ */
+  color: white;
 }
 
 .main-header nav a.active {
-  background-color: #333;
+  background-color: #e67300; /* アクティブリンクの背景色 */
   color: #fff;
   font-weight: 700;
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
@@ -116,7 +117,7 @@ body {
 }
 
 .main-header p a:hover {
-    background-color: rgba(255,255,255,0.2); /* 少し背景を変えてホバー感 */
+    background-color: rgba(255,255,255,0.2); /* 少しホバーの視覚効果 */
 }
 
 
@@ -138,12 +139,12 @@ body {
 }
 
 .main-header nav a:hover {
-  color: #ffefef;
+  color: #ffe5b4; /* ホバー時に明るいオレンジ */
 }
 
 /* ====== 下のナビ ====== */
 .main-nav-under {
-  background-color: #9f9e9e;
+  background-color: #ffaa42; /* 下部ナビゲーションの背景色に濃いオレンジ */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -172,12 +173,13 @@ body {
 }
 
 .main-nav-under a:hover {
-  color: #ffefef;
+  color: #ffe5b4; /* 下部リンクのホバー色をオレンジ系に */
 }
 
 /* ====== メインコンテンツ ====== */
 .main-content {
   display: flex;
+  color: #663300;
   justify-content: flex-end;  /* 右寄せ */
   align-items: flex-start;
   gap: 50px;
@@ -194,9 +196,9 @@ body {
   gap: 10px;                  
   width: 400px;
   height: 600px;
-  border: 2px solid #ccc;
+  border: 2px solid #ffb677; /* 境界線をオレンジ色に */
   border-radius: 12px;
-  background: #fdfdfd;
+  background: white; /* 背景を薄いオレンジ */
   position: relative;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   overflow: hidden; /* はみ出し防止 */
@@ -212,6 +214,7 @@ body {
 
 /* 矢印 */
 .arrow-right, .arrow-left {
+  border-left: 25px solid #ff8c1a; /* オレンジ矢印の色 */
   width: 0;
   height: 0;
   cursor: pointer;
@@ -221,13 +224,13 @@ body {
 .arrow-right {
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
-  border-left: 25px solid black;
+  border-left: 25px solid #ff8c1a;
 }
 
 .arrow-left {
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
-  border-right: 25px solid black;
+  border-right: 25px solid #ff8c1a;
 }
 
 .arrow-right:hover, .arrow-left:hover {
@@ -271,8 +274,8 @@ body {
 
 /* ====== フォローボタン ====== */
 .follow-box {
-  background: #ef2a41;
-  color: white;              
+  background: #ff8c1a;
+  color: white;          
   text-align: center;
   cursor: pointer;
   border: none;
@@ -283,7 +286,7 @@ body {
 }
 
 .follow-box:hover {
-  background: #d92038;
+  background: #ff8c1a;
   color: white;
 }
 
@@ -294,7 +297,13 @@ body {
   display: flex;          /* 中身を縦方向に配置 */
   flex-direction: column;
   justify-content: flex-start; /* 上から積む */
+  background: #fff5e5;
+  padding: 16px 20px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  border-radius: 12px;
 }
+
+
 
 /* コメント入力とボタンを横並びにするラッパー */
 .comment-input {
@@ -319,9 +328,9 @@ body {
 
 /* 投稿ボタン */
 .comment-submit {
+  background-color: #e67300;
   padding: 8px 14px;
   border: none;
-  background-color: #ef2a41;
   color: white;
   border-radius: 8px;
   cursor: pointer;
@@ -330,7 +339,7 @@ body {
 }
 
 .comment-submit:hover {
-  background-color: #d92038;
+  background-color: #ff5700;
 }
 
 .comment-area:focus {
@@ -389,7 +398,7 @@ body {
     padding: 4px 8px;
     font-size: 12px;
     border: none;
-    background-color: #ef2a41;
+    background-color: #ff8c1a; /* 展開ボタンを濃いオレンジ */
     color: white;
     border-radius: 6px;
     cursor: pointer;
@@ -400,10 +409,10 @@ body {
 .comment-modal {
   position: fixed;
   top: 0;
-  right: -100%;          /* 初期は画面外 */
-  width: 500px;           /* 好きな幅に調整 */
-  height: 100%;            /* 好きな高さに調整 */
-  background: #fff;
+  right: -100%; /* 初期は画面外 */
+  width: 500px; /* 好きな幅に調整 */
+  height: 100%; /* 好きな高さに調整 */
+  background: #ffe5b4; /* モーダルの背景色を薄いオレンジ */
   border-radius: 12px 12px 0 0;
   box-shadow: 0 -4px 15px rgba(0,0,0,0.2);
   transition: right 0.4s ease;
@@ -425,7 +434,7 @@ body {
   left: 0%;             /* 横中央 */
   transform: translate(-50%, -50%); /* ちょうど中央に */
   padding: 8px 16px;
-  background: #f44336;
+  background: #ff8c1a; /* モーダル閉じるボタンを濃いオレンジに変更 */
   color: white;
   border: none;
   border-radius: 8px;
@@ -438,39 +447,40 @@ body {
 }
 
 #complimentSelect {
-    width: 100%;
-    padding: 10px 15px;
-    font-size: 16px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    transition: all 0.3s ease;
-    cursor: pointer;
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: #ffe5b4; /* 背景を薄いオレンジ */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
 }
 
 #complimentSelect:hover {
-    border-color: #999;
-    background-color: #fff;
+  border-color: #ff8c1a;
+  background-color: #fff;
 }
 
 #complimentSelect:focus {
-    outline: none;
-    border-color: #666;
-    box-shadow: 0 0 5px rgba(0,0,0,0.2);
-    background-color: #fff;
+  outline: none;
+  border-color: #ff5700;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  background-color: #fff;
 }
 
 #complimentSelect-wrapper::after {
-    content: '▼';
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    color: #666;
+  content: '▼';
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #ff8c1a; /* オレンジで矢印を強調 */
 }
 
     .compliment-summary {
@@ -484,11 +494,11 @@ body {
     .compliment-title {
       cursor: pointer;
       font-weight: bold;
-      color: #333;
+      color: #ff8c1a;
       transition: color 0.2s;
     }
     .compliment-title:hover {
-      color: #555;
+      color: #e67300;
     }
     .compliment-users {
       margin-left: 20px;
@@ -518,7 +528,7 @@ body {
 .photo-slide {
   flex: 0 0 300px;
   scroll-snap-align: start;
-  background: #f9f9f9;
+  background: #ffefcc; /* 写真スライド背景色 */
   padding: 15px;
   border-radius: 10px;
   text-align: center;
