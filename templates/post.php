@@ -13,7 +13,7 @@ $savedFiles = [];
 $comment = '';
 
 // デバッグ出力（問題解決後にコメントアウトまたは削除してください）
-echo "セッション情報: <pre>" . print_r($_SESSION, true) . "</pre>";
+//echo "セッション情報: <pre>" . print_r($_SESSION, true) . "</pre>";
 
 function connectDB() {
 $host = 'localhost';
