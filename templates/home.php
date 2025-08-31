@@ -45,6 +45,45 @@ try {
 } catch (PDOException $e) {
     die("DB接続エラー: " . $e->getMessage());
 }
+
+// 褒め言葉投稿処理(いじった)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_compliment') {
+    // ログインチェック
+    if (!isset($_SESSION['user_id'])) {
+        echo json_encode(['success' => false, 'message' => 'ログインが必要です']);
+        exit;
+    }
+    
+    try {
+        // POSTデータの取得
+        $post_id = $_POST['post_id'];
+        $uid = $_SESSION['user_id']; // ログインユーザーのID
+        $compliment_text = $_POST['compliment_text'];
+        
+        // 褒め言葉テキストからIDを取得
+        $stmt = $pdo->prepare("SELECT compliment_id FROM compliment_list WHERE compliment_text = ?");
+        $stmt->execute([$compliment_text]);
+        $compliment_id = $stmt->fetchColumn();
+        
+        if (!$compliment_id) {
+            echo json_encode(['success' => false, 'message' => '無効な褒め言葉です']);
+            exit;
+        }
+        
+        // 褒め言葉を投稿テーブルに挿入
+        $stmt = $pdo->prepare("INSERT INTO post_compliment (post_id, uid, compliment_id) VALUES (?, ?, ?)");
+        $stmt->execute([$post_id, $uid, $compliment_id]);
+        
+        echo json_encode([
+            'success' => true, 
+            'message' => '褒め言葉を投稿しました！'
+        ]);
+        exit;
+    } catch (PDOException $e) {
+        echo json_encode(['success' => false, 'message' => 'データベースエラー: ' . $e->getMessage()]);
+        exit;
+    }
+}
 ?>
 
 
@@ -337,6 +376,53 @@ followBtn.addEventListener('click', () => {
     .catch(err => console.error(err));
 });
 
+// 褒め言葉投稿機能(いじった)
+document.querySelectorAll('.comment-submit').forEach(button => {
+    button.addEventListener('click', function() {
+        // 近いセレクト要素を取得
+        const selectElement = this.closest('.comment-input').querySelector('#complimentSelect');
+        const complimentText = selectElement.value;
+        
+        if (!complimentText) {
+            alert('褒め言葉を選択してください');
+            return;
+        }
+        
+        // 現在表示中の投稿インデックスを取得
+        let index = Math.round(scrollContainer.scrollLeft / (300 + 20));
+        if (index < 0) index = 0;
+        if (index >= posts.length) index = posts.length - 1;
+        
+        const postId = posts[index].post_id;
+        
+        // AJAX通信で褒め言葉を送信
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', window.location.href, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            alert('褒め言葉を投稿しました！');
+                            // 選択をリセット
+                            selectElement.selectedIndex = 0;
+                        } else {
+                            alert('エラー: ' + response.message);
+                        }
+                    } catch (e) {
+                        console.error('JSON解析エラー:', e);
+                        alert('応答の処理中にエラーが発生しました');
+                    }
+                } else {
+                    alert('通信エラー: ' + xhr.status);
+                }
+            }
+        };
+        xhr.send(`action=add_compliment&post_id=${postId}&compliment_text=${encodeURIComponent(complimentText)}`);
+    });
+});
 </script>
 
 
